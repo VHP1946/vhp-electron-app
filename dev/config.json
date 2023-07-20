@@ -1,0 +1,63 @@
+{
+    "app":"BEEQ",
+    "dev":{
+        "on":true
+    },
+    "access":{
+        "users":{
+            "MAN": {
+                "pswrd":"",
+                "config":{
+                    "group": "MAN",
+                    "name": "Residential Replacement Manager",
+                    "cell": "314-351-2533",
+                    "email": "sales@vogelheating.com"
+                }
+            },
+            "HORMA": {
+                "pswrd":"vogel123",
+                "config":{
+                    "group": "CONS",
+                    "name": "Mathew Horning",
+                    "cell": "",
+                    "email": "mathewh@vogelheating.com"
+                }
+            },
+            "VOGCH": {
+                "pswrd":"vogel123",
+                "config":{
+                    "group": "CONS",
+                    "name": "Christian Vogel",
+                    "cell": "314-351-2533",
+                    "email": "christianv@vogelheating.com"
+                }
+            }
+        },
+        "groups":{
+            "DEV": {
+                "main": "dash",
+                "tracker": "main"
+            },
+            "CONS": {
+                "main": "main",
+                "tracker": "main"
+            },
+            "MAN": {
+                "main": "dash",
+                "tracker": "main"
+            }
+        }
+    },
+    "controls":{
+        "stdHeight":1080,
+        "stdWidth":750,
+        "root":"/controls/",
+        "mainPage":"main",
+        "devPage":"main",
+        "pages":{
+            "login/":"index.js",
+            "settings/":{},
+            "main":{}
+        }
+    }
+}

@@ -1,0 +1,30 @@
+{
+  "deproot":"/Vogel - IM/dev/SharePoint/Vogel - Bldg Env/",
+  "locroot":"C:/IMDB/",
+  "settings":"/IMDB/quoter/settings.json",
+  "pricing":{
+    "book":"/Pricing Files/Price Book.xlsx",
+    "key":"pricekey.json"
+  },
+  "jobs":{
+    "root":"Residential Jobs",
+    "folders":{
+      "O":"1-Open Quotes",
+      "S":"2-Sold Jobs",
+      "I":"3-Jobs in Progress",
+      "C":"4-Jobs Invoiced"
+    },
+    "board":{
+      "root":"Documents & Protocol/Board Setup"
+    }
+  },
+  "store":{
+    "root":"/IMDB/store/",
+    "mquotes":"masterquotes.db"
+  },
+  "assets":{
+    "root":"/IMDB/assets/",
+    "pvicons":"PVicons",
+    "logos":"logos"
+  }
+}

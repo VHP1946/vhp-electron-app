@@ -1,0 +1,9 @@
+<div class="summary-action-center">
+    <div id="rrq-create-presentation" class="full-action-button">Create Presentation</div>
+    <div>Double Click on a price to view details.</div>
+</div>
+
+<div id="summary-system-cont" class="viewcontrol-cont">
+    <div class="viewcontrol-menu"><div></div></div>
+    <div class="viewcontrol-port"></div>
+</div>

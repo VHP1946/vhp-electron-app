@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <script> window.$ = window.jQuery = require("jquery");</script>
+
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Oswald"/>
+        <link rel="stylesheet" type="text/css" href="../css/vg-stdbook.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/quote-general.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/quote-summary.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/quote-presentation.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/vg-intable.css"/>
+        <link rel="stylesheet" type="text/css" href="../css/vg-utility.css"/>
+    </head>
+    <body>
+
+      <div id="vg-utilcont-top" class="vg-utilcont" >
+        <div class="vg-utilcont-top-info vg-utilcont-info">
+            <div id="vg-top-info-cont">
+            <img src="../images/icons/user.png" class="wo-nav-icon" alt="LOGIN">
+            <img id="quote-dash-toggle" src="../images/icons/layers.png" class="wo-nav-icon" alt="SOMET">
+            <div id="quote-mode-toggle">
+                <div class="mode-selected" id="consult-mode" >CONSULTATION MODE</div>
+                <div class="mode-nselected" id="present-mode">PRESENTATION MODE</div>
+            </div>
+            <img id="beeq-info-navbar" src="../images/icons/info.png" class="wo-nav-icon" alt="INFO">
+        </div>
+            <!--  WO Editor
+                  here the tech will be able to
+            -->
+            <div id='quote-dash-cont' style="display:none">
+                <div id='vg-quote-dash-header'>
+                    <div>Quote</div>
+                    <div>Client Name</div>
+                    <div>Address</div>
+                </div>
+              <div id='quote-dash-list'>
+              </div>
+            </div>
+
+        </div>
+        <div class="vg-utilcont-toggle" id="vg-top-toggle"></div>
+      </div>
+
+      <!-- TOAST BOX ------>
+      <div id="vg-toast-tr">
+        <div class="vg-note-list">
+        </div>
+      </div>
+
+      <!-- CENTER BOX ------>
+      <div class="vg-note-center-box">
+        <div id="beeq-ibox-navbar" style="display:none">
+            <img class="info-nav-button" src="../images/icons/user.png" alt="LOGIN"><div>Click to Log In/Out</div>
+            <img class="info-nav-button" src="../images/icons/layers.png" alt="QUOTES"><div>Click to Toggle Quote List</div>
+        </div>
+        <div id="beeq-ibox-quote" style="display:none">
+            <img class="info-nav-button" src="../images/icons/disk.png" alt="SAVE"><div>Click to Save Current Quote</div>
+            <img class="info-nav-button" src="../images/icons/trash.png" alt="DELETE"><div>Click to Delete Current Quote</div>
+            <img class="info-nav-button" src="../images/icons/cross.png" alt="CLEAR"><div>Click to Clear and Start New Quote</div>
+            <img class="info-nav-button" src="../images/icons/key.png" alt="REFRESH"><div>Click to Refresh Key</div>
+        </div>
+        <div id="beeq-ibox-summary" style="display:none">
+            <img class="info-nav-button" src="../images/icons/print.png" alt="PRINT"><div>Click to Print the Current Quote</div>
+        </div>
+        <div id="beeq-ibox-present" style="display:none">
+            <img class="info-nav-button" src="../images/icons/print.png" alt="PRINT"><div>Click to Print the Current Quote</div>
+        </div>
+      </div>
+
+
+        <!-- QUOTE CONTAINER
+            right and left will contain selectors for views.
+             as items are selected they are moved from right
+             to left (vise-versa).
+            -->
+        <div id = "quote-calc-cont" class="vg-stdbook-cont">
+
+            <!--HEADER FOR STDBOOK HEADER ------------------------>
+            <div class="vg-stdbook-header"></div>
+
+            <!--PAGES AND NAVIGATION CONTAINER ------------------------->
+            <div class="vg-stdbook-pages">
+                <!--SIDE BAR LEFT
+                    Left side bar will hold items that are not in view, but can be
+                    selected. When an item is selected, it and everything to the
+                    right of it in the list are hidden and made visible in the
+                    right side bar.
+                -->
+                <div class="vg-stdbook-cont-sidenav vg-stdbook-cont-sidenav-left">
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-customer-button" style="display:none;">QUOTE INFO</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-build-button" style="display:none;">WINDOWS</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-gblock-button" style="display:none">GLASSBLOCK</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-additions-button" style="display:none">ADDITIONS</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-summary-button" style="display:none">SUMMARY</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-present-button" style="display:none">PRESENTATION</div>
+                </div>
+
+                <!--VIEW CONTAINER -------------------------------------------------------------->
+                <div class="vg-stdbook-cont-views">
+                    <!--CUSTOMER VIEW -----------------------------------------------------------
+                        The customer view will hold the standard customer edit template inside
+                        the template should be able to be picked up and dropped into any page/
+                        element as needed, with little integrating.
+
+                        The portion that needs to remain mobile is "customer-module-edit"
+                    -->
+                    <div id="quoteview-customer">
+                        <div class="customer-module-edit">
+                            <div class="customer-edit-quote">
+                                <div class="customer-header">Quote Name/Number</div>
+                                <div>Quote Code</div><input id="q-quote-id"/>
+                            </div>
+                            <div class="customer-edit-client">
+                                <div class="customer-header">Client</div>
+                                <div>Cust Code</div><input id="q-customer-id"/><!--Create searchable/drop list for optional autofill-->
+                                <div>First</div><input id="q-customer-fname"/>
+                                <div>Last</div><input id="q-customer-lname"/>
+                            </div>
+                            <div class="customer-edit-contact">
+                                <div class="customer-header">Contact</div>
+                                <div>Phone</div><input id="q-customer-contact-phone"/>
+                                <div>Email</div><input id="q-customer-contact-email" type="email"/>
+                            </div>
+                            <div class="customer-edit-address">
+                                <div class="customer-header">Address</div>
+                                <div>Street</div><input id="q-customer-address-street"/>
+                                <div>Unit</div><input id="q-customer-address-suite"/>
+                                <div>City</div><input id="q-customer-address-city"/>
+                                <div>State</div><input id="q-customer-address-state"/>
+                                <div>Zip</div><input id="q-customer-address-zip"/>
+                            </div>
+                            <div class="customer-edit-home">
+                                <div class="customer-header">Home Details</div>
+                                <div>Home s.f.</div><input id="q-home-sf"/>
+                                <div>Attic s.f.</div><input id="q-home-attic-sf"/>
+                                <div>Roof Make</div><input id="q-home-roof-make"/>
+                                <div># Occupants</div><input id="q-home-occupants"/>
+                                <div>Front Facing</div><input id="q-home-direction"/>
+                                <div>Heat Load</div><input id="q-home-heatload"/>
+                                <div>Cooling Load</div><input id="q-home-coolload"/>
+                            </div>
+                            <div class="customer-header">Notes</div>
+                            <textarea id="q-customer-notes"></textarea>
+                        </div>
+                    </div>
+                    <!--------------------------------------------------------------------------->
+
+                    <!--WINDOW VIEW ------------------------------------------------------------->
+                    <div id="quoteview-build" style="display: none;">
+
+                        <!--Win Quote Builder
+
+                            A table to hold the windows of a home:
+                            - width
+                            - height
+                            - room
+                            - location
+
+                            Table will be constructed from divs
+                            leaving the length variable
+                        -->
+                        <!--WINDOW BUILD TABLE-------------------------------->
+                        <div id="winbuild-table" class="intable-bottom-add-cont">
+                            <div class="winbuild-table-row intable-bottom-add-row">
+                                <div class="intable-bottom-add-row-values">
+                                    <div>TYPE</div>
+                                    <div>STORY</div>
+                                    <div>ROOM</div>
+                                    <div>LOCATION</div>
+                                    <div>WIDTH</div>
+                                    <div>HEIGHT</div>
+
+                                </div>
+                            </div>
+                            <div class="winbuild-table-row intable-bottom-add-row">
+                                <div class="intable-bottom-add-row-values">
+                                    <input placeholder="Add New Item" type="search" list="win-type-list"/>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                                <div class="intable-actions">
+                                    <div class="intable-action-delete">DELETE</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="winbuild-display">
+                        </div>
+                        <!--------------------------------------------------->
+
+                        <!--TABLE ROW TEMPLATE------------------------------->
+                        <div id="winbuild-table-row" class="intable-bottom-add-row" style="display: none;">
+                            <div class="intable-bottom-add-row-values">
+                                <input class="winbuild-win-type" type="search" list="win-type-list"/>
+                                <input class="winbuild-win-story" type="number"/>
+                                <input class="winbuild-win-room" type="search" list="room-list"/>
+                                <input class="winbuild-win-location"/>
+                                <input class="winbuild-win-width" type="number"/>
+                                <input class="winbuild-win-height" type="number"/>
+                            </div>
+                            <div class="winbuild-win-options intable-bottom-add-row-util"></div>
+                        </div>
+
+                        <!--------------------------------------------------->
+                    </div>
+                    <!--------------------------------------------------------------------------->
+
+                    <!--GLASSBLOCK VIEW --------------------------------------------------------->
+                    <div id="quoteview-gblock" style="display: none;">
+                        <!--WINDOW BUILD TABLE-------------------------------->
+                        <div id="gbbuild-table" class="intable-bottom-add-cont">
+                            <div class="gbbuild-table-row intable-bottom-add-row">
+                                <div class="intable-bottom-add-row-values">
+                                    <div>AREA</div>
+                                    <div>WIDTH</div>
+                                    <div>HEIGHT</div>
+                                </div>
+                            </div>
+                            <div class="gbbuild-table-row intable-bottom-add-row">
+                                <div class="intable-bottom-add-row-values">
+                                    <input placeholder="Add New Item"/>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                                <div class="intable-actions">
+                                    <div class="intable-action-delete">DELETE</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!--GOING TO DELTE BELOW-->
+                        <div id="gbbuild-display">
+                        <!------------------------->
+
+                        </div>
+                        <!--------------------------------------------------->
+                        <!--TABLE ROW TEMPLATE------------------------------->
+                        <div id="gbbuild-table-row" style="display: none;">
+                            <div class="intable-bottom-add-row-values">
+                                <input class="gbbuild-gb-area"/>
+                                <input class="gbbuild-gb-width" type="number"/>
+                                <input class="gbbuild-gb-height" type="number"/>
+                            </div>
+                            <div class="gbbuild-gb-options intable-bottom-add-row-util"></div>
+                        </div>
+
+                    </div>
+                    <!--------------------------------------------------------------------------->
+
+                    <!--ADDITIONS VIEW ---------------------------------------------------------->
+                    <div id="quoteview-additions" style="display: none;">
+                        <div class="heading-title">Additions</div>
+                        <div id="additions-table" class="intable-bottom-add-cont">
+                            <div class="additions-table-row intable-bottom-add-row">
+                                <div class="intable-bottom-add-row-values">
+                                    <div>DESCRIPTION</div>
+                                    <div>AMOUNT</div>
+                                </div>
+                            </div>
+                            <div class="additions-table-row intable-bottom-add-row">
+                                <div class="intable-bottom-add-row-values">
+                                    <input placeholder="Add New Item"/>
+                                    <div></div>
+                                </div>
+                                <div class="intable-actions">
+                                    <div class="intable-action-delete">DELETE</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="insul-build-cont">
+                            <div class="heading-title">Insulation Calculator</div>
+                            <div id="insul-calc-build-area">
+                            <div id="insul-calc-inputs">
+                                <div>Square Foot</div><input id="insul-calc-sq" />
+                                <div>Add Insulation (inch)</div><input id="insul-calc-indepth" type="number"/>
+                              </div>
+                            <div id="insul-build-button-calc">CALC</div><!--May want to wrap this in a buttons container-->
+                            <div id="insul-build-pricing-cont"><!--Only put a container in case there was more pricing information required for final pricing-->
+                              <div>Total Price</div>
+                              <div id="insul-build-pricing-total">0</div>
+                            </div>
+                            </div>
+                            
+
+                            <div id="insul-build-packages"></div>
+                            <div id="insul-calc-cont">
+                              <div>Job</div>
+                              <div id="insul-build-options">
+                              </div>
+                            </div>
+
+                        </div>
+
+
+                        <div id="additions-table-row" class="intable-bottom-add-row" style="display:none;">
+                            <div class="intable-bottom-add-row-values">
+                                <input class="addition-row-description"/>
+                                <input class="addition-row-amount"/ type="number">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--------------------------------------------------------------------------->
+
+                    <!--SUMMARY VIEW ------------------------------------------------------------>
+                    <div id="quoteview-summary" style="display: none;">
+
+                        <!--    ORDER LIST  -----------------------------------------------------
+                        -->
+                        <div id="window-summary-cont" class="summary-cont">
+                            <!--TITlE FOR WINDOW SUMMARY SECTION-->
+                            <div class="summary-list-title">Windows</div>
+
+                            <!--Buttons to toggle between tier tables-->
+                            <div id="window-summary-tier-toggles">
+                                <div>BEST</div>
+                                <div>BETTER</div>
+                                <div>GOOD</div>
+                            </div>
+
+                            <!--Header row for all tier tables-->
+                            <div class="window-summary-row">
+                                <div class="window-summary-row-values window-summary-tier-headers">
+                                    <div>TYPE</div>
+                                    <div>MODEL</div>
+                                    <div>STORY</div>
+                                    <div>ROOM</div>
+                                    <div>LOCATION</div>
+                                    <div>WIDTH</div>
+                                    <div>HEIGHT</div>
+                                </div>
+                            </div>
+
+                            <!--Tier tables to match the number of toogle elements-->
+                            <div id="window-summary-tiers">
+                            </div>
+
+                            <div id="window-summary-tier-row" style="display:none">
+                                <div class="window-summary-row-values">
+                                    <div class="window-summary-row-type">-</div>
+                                    <div class="window-summary-row-model">-</div>
+                                    <div class="window-summary-row-story">-</div>
+                                    <div class="window-summary-row-room">-</div>
+                                    <div class="window-summary-row-location">-</div>
+                                    <div class="window-summary-row-width">-</div>
+                                    <div class="window-summary-row-height">-</div>
+                                    <div class="window-summary-row-options">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="glassblock-summary-cont" class="summary-cont">
+                            <div class="summary-list-title">Glass Blocks</div>
+                            <!--Header row for all tier tables-->
+                            <div class="gb-summary-row">
+                                <div class="gb-summary-row-values gb-summary-list-headers">
+                                    <div>AREA</div>
+                                    <div>WIDTH</div>
+                                    <div>HEIGHT</div>
+                                </div>
+                            </div>
+
+                            <div id="gb-summary-list">
+                            </div>
+
+                            <div id="gb-summary-row" style="display:none">
+                                <div class="gb-summary-row-values">
+                                    <div class="gb-summary-row-area">-</div>
+                                    <div class="gb-summary-row-width">-</div>
+                                    <div class="gb-summary-row-height">-</div>
+                                    <div class="gb-summary-row-options">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="additions-summary-cont" class="summary-cont">
+                            <!--TITlE FOR ADDITIONS SUMMARY SECTION-->
+                            <div class="summary-list-title">Additional Items</div>
+                            <div class="add-summary-row">
+                                <div class="add-summary-row-values add-summary-list-headers">
+                                    <div>DESCRIPTION</div>
+                                    <div>AMOUNT</div>
+                                </div>
+                            </div>
+                            <div id="add-summary-list">
+                            </div>
+                            <div id="add-summary-row">
+                              <div class="add-summary-row-values">
+                                <div class="add-summary-row-desc"></div>
+                                <div class="add-summary-row-amount"></div>
+                              </div>
+                            </div>
+
+                        </div>
+                        <!---------------------------------------------------------------------->
+
+                    </div>
+                    <!--------------------------------------------------------------------------->
+
+                    <!--Presentation View ----------------------------------------------------------->
+                    <div id="quoteview-present" style="display: none;">
+                        <div id="present-cont">
+                            <div id="present-header"> <!--PRESENTATION HEADER-->
+                                <img src="../images/BEE logo.png" alt="BEE" id="header-logo">
+                                <div id="present-quote-info">
+                                    <div id="present-customer-title">Quote Name</div>
+                                    <div>Personalized Window Solutions</div>
+                                    <div><span id="quote-window-number">14</span> Various Replacement Windows</div>
+                                </div>
+                                <div id="present-customer-info">
+                                    <span id="present-customer-name">Michael & Michelle Murphy</span>
+                                    <span id="present-customer-address">1962 Amber Sunrise Dr</span>
+                                    <span id="present-customer-csz">University City, MO 63010</span>
+                                    <span id="present-customer-phone">756-351-7337 / 555-867-5309</span>
+                                    <span id="present-customer-email">murphunum@gmail.com</span>
+                                </div>
+                            </div>
+                            <div id="present-window">
+                                <div id="present-window-tiers">
+                                    <div id="present-window-headers">
+                                        <!--    tier name
+                                                tier model-->
+                                        <div class="present-window-tier-block">
+                                            <span class="present-window-tier">Best</span>
+                                            <span class="present-window-model"></span>
+                                        </div>
+                                        <div class="present-window-tier-block">
+                                            <span class="present-window-tier">Better</span>
+                                            <span class="present-window-model"></span>
+                                        </div>
+                                        <div class="present-window-tier-block">
+                                            <span class="present-window-tier">Base</span>
+                                            <span class="present-window-model"></span>
+                                        </div>
+                                    </div>
+                                    <div class="present-title">Features and Benefits</div> <!--SPANS ENTIRE WIDTH-->
+                                    <div id="present-window-benifits">
+                                        <!--Vertical list of benifits-->
+                                        <div class="present-window-tier-block">
+                                            <div class="present-window-benifit">Double Pane, Low-E, Argon Filled</div>
+                                            <div class="present-window-benifit">Wood Laminated Interior Finish (Painted or Stained)</div>
+                                            <div class="present-window-benifit">Combo Tilt / Latch / Lock Assembly</div>
+                                            <div class="present-window-benifit">Lifetime Glass Breakage Warranty</div>
+                                            <div class="present-window-benifit">Limited Lifetime Warranty</div>
+                                        </div>
+                                        <div class="present-window-tier-block">
+                                            <div class="present-window-benifit">Double Pane, Low-E, Argon Filled</div>
+                                            <div class="present-window-benifit">Standard Vinyl Finish (unless upgraded below)</div>
+                                            <div class="present-window-benifit">Combo Tilt / Latch / Lock Assembly</div>
+                                            <div class="present-window-benifit">Lifetime Glass Breakage Warranty</div>
+                                            <div class="present-window-benifit">Limited Lifetime Warranty</div>
+                                        </div>
+                                        <div class="present-window-tier-block">
+                                            <div class="present-window-benifit">Double Pane, Low-E, Argon Filled</div>
+                                            <div class="present-window-benifit">Standard Vinyl Finish</div>
+                                            <div class="present-window-benifit">Separate Tilt - Latch / Lock Assembly</div>
+                                            <div class="present-window-benifit">Lifetime Glass Breakage Warranty</div>
+                                            <div class="present-window-benifit">Limited Lifetime Warranty</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="present-window-options">
+                                    <div class="present-title">Customizations and Upgrades</div>
+                                    <!--    include only options selected
+                                            addtional notes where needed-->
+                                    <div id="present-window-options-list">
+                                        <div id="present-option-TripleGlass" class="present-window-option">Triple Glass* (Not Available in Ecolite,)</div>
+                                        <div id="present-option-UpgradeLowE" class="present-window-option">Upgrade to Low-E</div>
+                                        <div id="present-option-Tempered" class="present-window-option">Tempered Glass*</div>
+                                        <div id="present-option-Obscure" class="present-window-option">Obscure Glass*</div>
+                                        <div id="present-option-InternalGrid" class="present-window-option">Internal Grids*</div>
+                                        <div id="present-option-SimulatedDivided" class="present-window-option">Simulated Divided Light* (Not Available in Ecolite)</div>
+                                        <div id="present-option-InternalBlinds" class="present-window-option">Internal Blinds* (Not Available in Ecolite)</div>
+                                        <div id="present-option-InteriorLaminate" class="present-window-option">Faux Wood Laminate* (Endure Only)</div>
+                                        <div id="present-option-BiegeSandBase" class="present-window-option">Moulded (Beige or Sandstone Vinyl)* (Not Available in Ecolite)</div>
+
+                                        <div id="present-option-PaintedExterior" class="present-window-option">Painted Exterior</div>
+
+                                        <div id="present-option-BronzeBase" class="present-window-option">Bronze Base Color</div>
+                                        <div id="present-option-FullScreen" class="present-window-option">Full Screen</div>
+                                        <div class="present-window-option" id="present-window-note">*where selected</div><!-- Hard code this guy -->
+                                    </div>
+                                </div>
+                                <div id="present-window-trims">
+                                    <div class="present-title">Exterior Paint and Interior Trim Options<span class="present-subtitle"> (Included in Price as Selected)</span></div>
+                                    <div id="present-window-trim-list">
+                                            <div class="present-window-trim">
+                                                <span class="present-trim-name">Painted - Add:</span>
+                                                <span class="present-trim-price">$1500</span>
+                                                <input class="present-trim-selector" type="checkbox"/>
+                                            </div>
+                                            <div>
+                                                <span class="present-trim-name">Oak Stained - Add:</span>
+                                                <span class="present-trim-price">$2500</span>
+                                                <input class="present-trim-selector" type="checkbox"/>
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="present-glassblocks">
+                                <div class="present-title">Glass Blocks</div>
+                                <div id="present-glassblock-list">
+                                </div>
+                            </div>
+                            <div id="present-additions">
+                                <div class="present-title">Additional Items<span class="present-subtitle"> (Included in Price for all Options)</span></div>
+                                <div id="present-addition-list">
+                                </div>
+                            </div>
+                            <!--  INVESTMENTS
+                                Invevetment groups will be added per 1:
+                                    GROUP ELEMENTS (present-investment):
+                                        - present-investment-total
+                                        - present-finance-monthly
+                                        - present-finance-title
+                            -->
+                            <div id="present-investments">
+                                <div class="present-title">Investment</div>
+                                <div id="present-investment-list">
+                                    <div class="present-investment" class="present-window-tier-block">
+                                        <div class="present-investment-monthly">375</div>
+                                        <div class="present-finance-title">
+                                            <div>$0 Down Today</div>
+                                            <div>60 M0 @ 4.75%</div>
+                                        </div>
+                                        <div class="present-investment-total">15000</div>
+                                    </div>
+                                    <div class="present-investment" class="present-window-tier-block">
+                                        <div class="present-investment-monthly">375</div>
+                                        <div class="present-finance-title">
+                                            <div>$0 Down Today</div>
+                                            <div>60 M0 @ 4.75%</div>
+                                        </div>
+                                        <div class="present-investment-total">15000</div>
+                                    </div>
+                                    <div class="present-investment" class="present-window-tier-block">
+                                        <div class="present-investment-monthly">375</div>
+                                        <div class="present-finance-title">
+                                            <div>$0 Down Today</div>
+                                            <div>60 M0 @ 4.75%</div>
+                                        </div>
+                                        <div class="present-investment-total">15000</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--------------------------------------------------------------------------->
+
+                </div>
+                <!------------------------------------------------------------------------------->
+
+                <!--SIDE BAR RIGHT --------------------------------------------------------------
+                    The right side bar holds the current view. If the current view is selected,
+                    nothing should happen. If a view behind (to the right) of the visible view
+                    is selected, then every button to the left of it is moved to the left side
+                    bar, leaving the current view furthest left (in the right side bar) and
+                    other views behind it still exposed.
+                -->
+                <div class="vg-stdbook-cont-sidenav vg-stdbook-cont-sidenav-right">
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-customer-button vg-stdbook-cont-sidenav-button-selected">QUOTE INFO
+                        <div>
+                            <img id="beeq-save-quote" class="quote-nav-button" src="../images/icons/disk.png" alt="SAVE">
+                            <img id="beeq-close-quote" class="quote-nav-button" src="../images/icons/cross.png" alt="CLEAR">
+                            <img id="beeq-delete-quote" class="quote-nav-button" src="../images/icons/trash.png" alt="DELETE">
+
+                        </div>
+                        <div class="q-bottom-nav-buttons">
+                            <img id="q-refresh-key" class="quote-nav-button" src="../images/icons/key.png" alt="REFRESH">
+                            <img id="beeq-info-quote" class="quote-nav-button" src="../images/icons/info.png" alt="INFO">
+                        </div>
+                    </div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-build-button">WINDOWS</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-gblock-button">GLASSBLOCK</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-additions-button">ADDITIONS</div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-summary-button">SUMMARY
+                        <div>
+                            <img id="beeq-print-summary" class="quote-nav-button" src="../images/icons/print.png" alt="PRINT">
+                        </div>
+                        <div class="q-bottom-nav-buttons">
+                            <img id="beeq-info-summary" class="quote-nav-button" src="../images/icons/info.png" alt="INFO">
+                        </div>
+                    </div>
+                    <div class="vg-stdbook-cont-sidenav-button quoteview-present-button">PRESENTATION
+                        <div>
+                            <img id="beeq-print-present" class="quote-nav-button" src="../images/icons/print.png" alt="PRINT">
+                        </div>
+                        <div class="q-bottom-nav-buttons">
+                            <img id="beeq-info-present" class="quote-nav-button" src="../images/icons/info.png" alt="INFO">
+                        </div>
+                    </div>
+                </div>
+                <!------------------------------------------------------------------------------->
+            </div>
+            <!----------------------------------------------------------------------------------->
+        </div>
+
+        <!------------------------------------------------------------------------------------->
+
+        <div id="validation-list">
+            <datalist id="win-type-list">
+            </datalist>
+            <datalist id="room-list">
+                <option>Dining Room</option>
+                <option>Living Room</option>
+                <option>Kitchen</option>
+                <option>Basement</option>
+                <option>Master</option>
+                <option>Bedroom</option>
+                <option>Bathroom</option>
+            </datalist>
+        </div>
+
+    </body>
+
+  <script src='../js/vg-quoter.js'>
+
+  </script>
+
+</html>

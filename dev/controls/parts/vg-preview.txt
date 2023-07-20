@@ -1,0 +1,23 @@
+<div id="vg-center-info-preview">
+    <div class="preview-header" id="preview-quote-id">QUOTE PREVIEW</div>
+    <div class="preview-area-client">
+        <label>Client Name</label><div id="preview-value-cname"></div>
+        <label>Job Address</label><div id="preview-value-jaddy"></div>
+        <label>Client Address</label><div id="preview-value-caddy"></div>
+        <label>Contact Phone</label><div id="preview-value-phone1"></div>
+        <label>Contact Email</label><div id="preview-value-email"></div>
+    </div>
+    <div id="preview-area-systems" class="viewcontrol-cont">
+        <div class="viewcontrol-menu"><div>
+        </div></div>
+        <div class="viewcontrol-port"></div>
+    </div>
+    <div class="preview-area-buttons">
+        <div id="open-cur-quote" class="flat-action-button">OPEN</div>
+        <div class="preview-area-dates">
+            <div>Date Created: <span id="preview-value-created"></span></div>
+            <div>Last Saved: <span id="preview-value-saved"></span></div>
+        </div>
+        <div id="close-preview" class="flat-action-button">CLOSE</div>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+{
+  "name": "vhp-electron-app",
+  "version": "0.1.0",
+  "private": true,
+  "main": "app.js",
+  "dependencies": {
+    "electron": "^18.2.3",
+    "jquery": "^3.6.0",
+    "nedb": "^1.8.0",
+    "pdf-lib": "^1.17.1",
+    "vhp-api": "^0.1.20",
+    
+    "xlsx": "^0.18.5",
+    "xlsx-populate": "^1.21.0"
+  },
+  "scripts": {
+    "mtrans": "node ./dev/marttrans.js",
+    "electron": "electron app.js",
+    "bench": "node test.js",
+    "dev": "electron ./dev/testapp.js",
+    "package-app": "electron-packager ./ REACTron --overwrite --asar=true --platform=win32 --arch=arm64 --icon=./bin/assets/icons/V-Mark-red.ico --prune=true --out=../../TESTbuilds/ --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"REACTron\""
+  }
+}

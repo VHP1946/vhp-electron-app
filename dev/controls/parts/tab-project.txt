@@ -1,0 +1,44 @@
+
+
+<div class="viewcontrol-menu">
+  <div class="viewcontrol-menubox">
+    <div class="viewcontrol-menu-item" title="JOB">Job</div>
+    <div class="viewcontrol-menu-item" title="CUSTOMER">Customer</div>
+    <div class="viewcontrol-menu-item" title="TRACKING">Tracking</div>
+  </div>
+  <div class="viewcontrol-quick-actions"></div>
+</div>
+<div class="viewcontrol-port">
+  <div class="viewcontrol-port-item" title="JOB">
+    <div class="customer-edit-jinfo">
+        <div style="display:none;">Quote Number</div><input id="q-info-id" style="display:none";/><!--Create searchable/drop list for optional autofill-->
+        <div>Quote Name</div><input id="q-info-name"/>
+    </div>
+    <hr>
+    <div class="customer-edit-jaddress">
+        <div>Street</div><input id="q-info-street"/>
+        <div>Unit</div><input id="q-info-unit"/>
+        <div>City</div><input id="q-info-city"/>
+        <div>State</div><input id="q-info-state"/>
+        <div>Zip</div><input id="q-info-zip"/>
+    </div>
+  </div>
+  <div class="viewcontrol-port-item" title="CUSTOMER">
+    <div class="customer-edit-cinfo">
+        <div>Cust Code</div><input id="q-customer-id"/><!--Create searchable/drop list for optional autofill-->
+        <div>First Name</div><input id="q-customer-cfname"/>
+        <div>Last Name</div><input id="q-customer-clname"/>
+        <div>Phone</div><input id="q-customer-cphone"/>
+        <div>Email</div><input id="q-customer-cemail" type="email"/>
+    </div>
+  </div>
+  <div class="viewcontrol-port-item" title="TRACKING">
+    <div class="customer-edit-tracking">
+      <div>Time of Day</div><select id="q-tracking-time" type="search"></select>
+      <div>Source</div><select id="q-tracking-source" type="search"></select>
+      <div>Lead</div><select id="q-tracking-lead" type="search"></select>
+      <div>Presented Date</div><input id="q-tracking-prstdate" type="date"/>
+      <div>Presented Via</div><select id="q-tracking-prstvia" type="search" list="track-prsntvia-droplist"></select>
+    </div>
+  </div>
+</div>

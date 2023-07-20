@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        <div id="vg-cont">
+          LOADING..
+        </div>
+    </body>
+    <script>
+      var {ipcRenderer}=require('electron');
+      var {quoteroutes}=require('../bin/routes.js');
+
+      var checkin=()=>{
+        ipcRenderer.send('LOADcheck','Loading..');
+        setTimeout(()=>{
+          checkin();
+        },5);
+      }
+
+
+      checkin();
+
+      ipcRenderer.on('LOADcheck',(eve,data)=>{
+        console.log(data);
+        if(data){window.close()}
+      });
+    </script>
+</html>

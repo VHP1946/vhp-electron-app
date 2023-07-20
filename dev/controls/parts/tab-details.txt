@@ -1,0 +1,129 @@
+
+    <div class="rrq-proj-details-group" id="proj-details-topper">
+        <div class="rrq-proj-details-header">Project Notes</div>
+        <div class="rr-proj-details-item">Early Start<input/><div class="vg-checkbox"></div></div>
+        <div class="rr-proj-details-item">Crane Required<input/><div class="vg-checkbox"></div></div>
+        <div class="rr-proj-details-item">Yard Sign<div></div><div class="vg-checkbox"></div></div>
+        <div class="rr-proj-details-item">Clean Up and Equpment Disposal<div></div><div class="vg-checkbox"></div></div>
+        <div class="rr-proj-details-item">40' Ladder Required<div></div><div class="vg-checkbox"></div></div>
+    </div>
+   
+    <div class="rrq-proj-details-group">
+        <div class="rrq-proj-details-header">Piping<div></div>
+            <div>Opt 1</div><div>Opt 2</div><div>Opt 3</div><div>Opt 4</div>
+        </div>
+        <div class="rr-proj-details-item">New Line Set
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/>  
+        </div>
+        <div class="rr-proj-details-item">Replace Filter/Drier
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/>     
+        </div>
+        <div class="rr-proj-details-item">Gas Safety Shutoff
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/>        
+        </div>
+        <div class="rr-proj-details-item">Safety Wet Switch
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/>         
+        </div>
+        <div class="rr-proj-details-item">New Condensate Line
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/>  
+        </div>
+    </div>
+
+    <div class="rrq-proj-details-group">
+        <div class="rrq-proj-details-header">Metal<div></div>
+            <div>Opt 1</div><div>Opt 2</div><div>Opt 3</div><div>Opt 4</div><div></div>
+        </div>
+        <div class="rr-proj-details-item">New Supply Plenum
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">New Return Drop
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Coil Transition
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Return Air Box
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Secondary Drain Pan
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+    </div>
+
+    <div class="rrq-proj-details-group">
+        <div class="rrq-proj-details-header">Wiring<div></div>
+            <div>Opt 1</div><div>Opt 2</div><div>Opt 3</div><div>Opt 4</div><div></div>
+        </div>
+        <div class="rr-proj-details-item">New Electrical Disconnect
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">New Control Wiring
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">New Supply Wiring Provided
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+    </div>
+
+    <div class="rrq-proj-details-group">
+        <div class="rrq-proj-details-header">Exterior Setting<div></div>
+            <div>Opt 1</div><div>Opt 2</div><div>Opt 3</div><div>Opt 4</div><div></div>
+        </div>
+        <div class="rr-proj-details-item">Pre-Formed Concrete Pad
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Level with Gravel Fill
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Reuse Existing Brackets
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">New Wall Brackets
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+    </div>
+
+    <div class="rrq-proj-details-group">
+        <div class="rrq-proj-details-header">Ventalation<div></div>
+            <div>Opt 1</div><div>Opt 2</div><div>Opt 3</div><div>Opt 4</div><div></div>
+        </div>
+        <div class="rr-proj-details-item">PVC Flue
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Combustion Air Grille(s)
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Chimney Flue Liner
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Impediments
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+    </div>
+
+    <div class="rrq-proj-details-group">
+        <div class="rrq-proj-details-header">Inclusions<div></div>
+            <div>Opt 1</div><div>Opt 2</div><div>Opt 3</div><div>Opt 4</div><div></div>
+        </div>
+        <div class="rr-proj-details-item">Rewards Membership
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Mechanical Permit Included
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Equipment Verification
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+        <div class="rr-proj-details-item">Follow-Up Fine Tune
+            <div class="sm-action-button">ALL</div><input/><input/><input/><input/> 
+        </div>
+    </div>
+
+    <div class="rr-proj-details-group">
+        <div class="rrq-proj-details-header">Consultant Notes
+        </div>
+        <div class="rr-proj-details-item">
+            <textarea id="cons-notes"></textarea>
+        </div>
+    </div>
+

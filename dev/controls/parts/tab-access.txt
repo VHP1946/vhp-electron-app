@@ -1,0 +1,72 @@
+<div id="build-mod-cont">
+    <div class="multi-tier-nav">
+      <div id="build-mod-adds-button" class="vg-subtab-selected">Additions</div>
+      <div id="build-mod-iaq-button">IAQ Packages</div>
+      <div id="build-mod-dscnts-button">Discounts</div>
+    </div>
+    <div class="build-inner-cont">
+      <div class="build-dscnts-cont" style="display:none">
+      </div>
+    </div>
+    <div id="build-mod-views" class="viewcontrol-cont">
+
+      <div class="viewcontrol-menu"><div></div></div>
+        <div class="viewcontrol-port">
+        </div>
+
+        <div id="build-mod-system" style="display:none">
+          <div class="build-mod-cont">
+            <div><!--TITLE LINE-->
+              <div class="build-mod-add-line"><!--ADDs Select Title-->
+                <div></div>
+                <div class="build-mod-add-title-tiers build-mod-add-tiers">
+
+                </div>
+                <div class="build-mod-add-title-prices">
+
+                </div>
+              </div>
+            </div>
+            <div class="build-mod-enh-selects build-mod-selects">
+              <div class="build-mod-select-title">ENHANCEMENTS</div>
+            </div>
+            <div class="build-mod-add-selects build-mod-selects">
+              <div class="build-mod-select-title">ADDITIONS</div>
+            </div>
+            <div class="build-mod-add-controls-cont">
+              <div class="build-mod-add-filter-cont">
+                <input class="build-mod-add-in" maxlength="75" placeholder="Add Addition..."/>
+                <span class="icon-action-button"><img class="build-mod-add-inbutton" src="../bin/repo/assets/icons/plus-icon.png"/ ></span>
+                <div class="flat-action-button modslist-show">SHOW</div>
+              </div>
+              <div class="flat-action-button build-mod-add-delete">DELETE</div>
+            </div>
+            <div class="min-page-cont-mods" style="display:none">
+              <div class="min-page-menu"><div class="min-page-hide-button sm-action-button">X</div></div>
+              <div class="min-page-view">
+                <div class="build-mod-add-list vg-gentable">
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="build-iaq-cont" style="display:none;">
+            <h1>IAQ BUILD</h1>
+            <div>DO NOT START</div>
+          </div>
+
+          <div class="build-dscnts-cont" style="display:none;">
+            <div class="build-dscnts-titles build-mod-add-line">
+              <div>Description</div>
+              <div class="build-dscnts-tiers build-mod-add-title-tiers build-mod-add-tiers">
+              </div>
+            </div>
+            <div class="build-dscnts-list">
+            </div>
+            <div class="build-swap-table">
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
