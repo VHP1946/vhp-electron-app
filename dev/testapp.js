@@ -1,5 +1,5 @@
 const path = require('path');
-const App = require('../app.js');
+const App = require('../app');//'vhp-electron-app');
 const settings = require('./settings.json');
 const config = require('./config.json');
 
@@ -19,16 +19,6 @@ let prog = new App({
     }
   }
 });
-
-
-
-
-
-
-
-
-
-
 
 /* LANDING PAGE
     The landing page will more often be the login screen
@@ -58,11 +48,6 @@ app.on('activate', () => {
 });
 
 */
-
-
-
-
-
 
 /*
 ipcMain.on(navroutes.gotopresi,(eve,data)=>{

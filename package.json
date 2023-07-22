@@ -1,7 +1,6 @@
 {
   "name": "vhp-electron-app",
   "version": "0.1.0",
-  "private": true,
   "main": "app.js",
   "dependencies": {
     "electron": "^18.2.3",
@@ -12,7 +11,22 @@
     
     "xlsx": "^0.18.5",
     "xlsx-populate": "^1.21.0"
+  },  
+  "devDependencies": {
+    "nodemon": "^2.0.19",
+    "vhp-electron-app":"0.1.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VHP1946/vhp-electron-app.git"
+  },
+  "author": "cmv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VHP1946/vhp-electron-app/issues"
+  },
+  "homepage": "https://github.com/VHP1946/vhp-electron-app#readme",
+  
   "scripts": {
     "mtrans": "node ./dev/marttrans.js",
     "electron": "electron app.js",
