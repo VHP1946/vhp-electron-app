@@ -1,0 +1,14 @@
+<div class="summary-action-center">
+    <div id="rrq-create-presentation" class="full-action-button">Create Presentation</div>
+    <div id="rrq-equip-select">
+        <div id="rrq-equip-sys" class="full-action-button equip-selection">System</div>
+        <div id="rrq-equip-out" class="full-action-button">Outdoor</div>
+        <div id="rrq-equip-in" class="full-action-button">Indoor</div>
+    </div>
+    <div>Double Click on a price to view details.</div>
+</div>
+
+<div id="summary-system-cont" class="viewcontrol-cont">
+    <div class="viewcontrol-menu"><div></div></div>
+    <div class="viewcontrol-port"></div>
+</div>

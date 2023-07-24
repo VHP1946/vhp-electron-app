@@ -1,0 +1,54 @@
+/* Client Tab -----------------------------------------*/
+#customer-module-edit{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+    row-gap: 5px;
+}
+[class*="customer-edit-"]{
+    display:grid;
+    grid-template-columns: 100px 1fr;
+    align-items: start;
+    row-gap: 5px;
+    padding: 5px;
+}
+.customer-edit-siteinfo{
+    display:block;
+}
+
+.customer-edit-utilities{
+    display:flex;
+    justify-content: space-between;
+}
+#proj-details-topper{
+    grid-column: 1 / 3;
+    padding: 20px 150px 0px 150px;
+}
+.rrq-proj-details-header{
+    border-bottom: 2px solid var(--background-dark);
+    font-weight: bold;
+}
+.rrq-proj-details-group{
+    padding-bottom: 20px;
+}
+.rr-proj-details-item,.rrq-proj-details-header{
+    display: grid;
+    grid-template-columns: 1fr 50px repeat(4, 1fr);
+    column-gap: 10px;
+}
+.rr-proj-details-item{
+    padding: 2px 0px;
+}
+#cons-notes{
+    grid-column: 3 / 7;
+    resize: vertical;
+}
+
+#build-info-edit>div>.viewcontrol-menu-item{
+    background-color: var(--background-base);
+    color: black;
+}
+#build-info-edit>div>.viewcontrol-menu-selected{
+    background-color: var(--background-dark);
+    color: var(--text-light);
+}

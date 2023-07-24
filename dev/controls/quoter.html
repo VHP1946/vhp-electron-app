@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+          require('../bin/repo/gui/js/tools/vg-partials.js').writePart(__dirname + '/parts/vg-heads.txt',document.head);
+        </script>
+
+        <link rel="stylesheet" type="text/css" href="../bin/repo/gui/styles/layouts/vg-stdbook.css"/>
+
+        <link rel="stylesheet" type="text/css" href="../bin/gui/styles/tab-project.css"/>
+        <link rel="stylesheet" type="text/css" href="../bin/gui/styles/tab-mods.css"/>
+        <link rel="stylesheet" type="text/css" href="../bin/gui/styles/tab-systems.css"/>
+        <link rel="stylesheet" type="text/css" href="../bin/gui/styles/tab-summary.css"/>
+        <link rel="stylesheet" href="../bin/repo/gui/styles/modules/vg-floatviews.css"/>
+    </head>
+    <body>
+
+      <!-- TOAST BOX ------>
+      <div id="vg-toast-tr">
+        <div class="vg-note-list">
+        </div>
+      </div>
+
+      <div id="quote-popview" class="vg-float-frame">
+        <div class="vg-float-view" title="Summary Preview">
+          <div id="summary-preview">
+            <div class="preview-header">SUMMARY PREVIEW</div>
+            <div class="preview-financials">
+              <div>Total Price: </div><div id="financials-total"></div>
+              <div>Monthly Price: </div><div id="financials-mo"></div>
+              <div>Lender & Code: </div><div id="financials-lender"></div>
+            </div>
+            <div class="preview-actions">
+              <div class="flat-action-button" id="contract-cash">CASH</div>
+              <div class="flat-action-button" id="contract-fin">FINANCE</div>
+            </div>
+          </div>
+        </div>
+        <img id="vg-float-frame-close" src="../bin/repo/assets/icons/cross.png"/>
+      </div>
+      <!-- QUOTE CONTAINER
+          right and left will contain selectors for views.
+           as items are selected they are moved from right
+           to left (vise-versa).
+          -->
+      <div id = "quote-calc-cont" class="vg-stdbook-cont">
+
+          <!--HEADER FOR STDBOOK HEADER --------------------
+          <div class="vg-stdbook-header"></div>
+          ---->
+
+          <!--PAGES AND NAVIGATION CONTAINER ------------------------->
+          <div class="vg-stdbook-pages">
+              <!--SIDE BAR LEFT
+                  Left side bar will hold items that are not in view, but can be
+                  selected. When an item is selected, it and everything to the
+                  right of it in the list are hidden and made visible in the
+                  right side bar.
+              -->
+              <div class="vg-stdbook-cont-sidenav vg-stdbook-cont-sidenav-left">
+                  <div class="vg-stdbook-cont-sidenav-button rrq-info-button" style="display:none;">PROJECT INFO</div>
+                  <div class="vg-stdbook-cont-sidenav-button rrq-systems-button" style="display:none;">SYSTEM SELECTION</div>
+                  <div class="vg-stdbook-cont-sidenav-button rrq-accessories-button" style="display:none">MODIFICATIONS</div>
+                  <div class="vg-stdbook-cont-sidenav-button rrq-summary-button" style="display:none">SUMMARY</div>
+              </div>
+
+              <!--VIEW CONTAINER -------------------------------------------------------------->
+              <div class="vg-stdbook-cont-views">
+
+                  <!--CLIENT VIEW / BUILT IN PATRIAL ------------------------------------------->
+                  <div id="rrq-build-info">
+                      <script>
+                          require('../bin/repo/gui/js/tools/vg-partials.js').writePart(__dirname + '/parts/tab-project.txt',
+                                                                              document.getElementById('rrq-build-info'),
+                                                                              'build-info-edit', true);
+                      </script>
+                  </div>
+                  <!--------------------------------------------------------------------------->
+
+                  <!--SYSTEMS VIEW ------------------------------------------------------------>
+                  <div id="rrq-build-systems" style="display: none;">
+                    <div id="build-system-add-cont">
+                      Add System:<input id="build-system-add-name" type="text" value="Whole Home"/>
+                      <span id="build-system-add-button" class="sm-action-button">+</span>
+                    </div>
+                    <div id="build-systems-cont" class="viewcontrol-cont">
+                      <div class="viewcontrol-menu">
+                        <div></div>
+                        <div></div>
+                      </div>
+                      <div id="build-systems" class="viewcontrol-port tnv-views-cont"></div>
+
+                      <!-- UTILITY VIEW FOR BUILD SYSTEM SIZES--------------------------------------------------------->
+                      <div class="min-page-cont" style="display:none">
+                        <div class="min-page-menu"><div class="min-page-hide-button sm-action-button">X</div></div>
+                        <div class="min-page-view">
+                          <div class="build-system-tier-sizes vg-gentable">
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <!----------------------------------------------------------------------------------------------->
+                    </div>
+
+
+                    <div id="build-system" style="display:none"><!--TEMPLATE for a system tab-->
+                      <div class="build-system-info"><!--Holds information about the system in general-->
+                        <label>System Type</label><input class="build-system-group" type="search" list="system-groups-list"/>
+                        <label>Cooling BTUs</label><input class="build-system-coolbtus"/>
+                        <label>Heating BTUs</label><input class="build-system-heatbtus"/>
+                        <label>Area Served</label><input class="build-system-areaserve"/>
+                        <label>Outdoor Location</label><input class="build-system-outlocation"/>
+                        <label>Indoor Location</label><input class="build-system-inlocation"/>
+                      </div>
+                      <div class="build-tier-block">
+                        <div>
+                          <div class="build-system-tier-name">Name</div>
+                          <div class="build-system-tiers-headers"><!--System Headers--></div>
+                        </div>
+                        <div class="build-system-tiers">
+                          <!--Tiers are added as described by manager-->
+                          <div class="build-system-tier"><!--Template Tier-->
+                            <div>
+                              <div class="build-system-tier-name">Name</div>
+                            </div>
+                            <div class="build-system-tier-system" style="display:none"><!--Holds the system info-->
+
+                            </div>
+                            <div class="build-system-tier-size"><!--contents reflect key.groups[].optheads-->
+                            </div>
+                            <div class="build-system-tier-sizes" style="display:none"><!--Holds rows of size options
+                              Click on a row to add it to the above 'build-system-tier-size'-->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--------------------------------------------------------------------------->
+
+
+                  <!--MODIFICATIONS VIEW / BUILT IN PATRIAL ----------------------------------->
+                  <div id="rrq-build-accessories" style="display: none;">
+                      <script>
+                          require('../bin/repo/gui/js/tools/vg-partials.js').writePart(__dirname + '/parts/tab-modifications.txt',
+                                                                              document.getElementById('rrq-build-accessories'),
+                                                                              'rrq-proj-accessories-form', true);
+                      </script>
+                  </div>
+                  <!--------------------------------------------------------------------------->
+
+
+                  <!--SUMMARY VIEW / BUILT IN PARTIAL ----------------------------------------->
+                  <div id="rrq-build-summary" style="display: none;">
+                    <script>
+                      require('../bin/repo/gui/js/tools/vg-partials.js').writePart(__dirname + '/parts/tab-summary.txt',
+                                                                          document.getElementById('rrq-build-summary'),
+                                                                          'rrq-summary-module', true);
+                    </script>
+
+                  </div>
+                  <!--------------------------------------------------------------------------->
+              </div>
+
+              <!--SIDE BAR RIGHT --------------------------------------------------------------
+                  The right side bar holds the current view. If the current view is selected,
+                  nothing should happen. If a view behind (to the right) of the visible view
+                  is selected, then every button to the left of it is moved to the left side
+                  bar, leaving the current view furthest left (in the right side bar) and
+                  other views behind it still exposed.
+              -->
+              <div class="vg-stdbook-cont-sidenav vg-stdbook-cont-sidenav-right">
+                  <div class="vg-stdbook-cont-sidenav-button rrq-info-button vg-stdbook-cont-sidenav-button-selected">PROJECT INFO</div>
+                  <div class="vg-stdbook-cont-sidenav-button rrq-systems-button">SYSTEM SELECTION</div>
+                  <div class="vg-stdbook-cont-sidenav-button rrq-accessories-button">MODIFICATIONS</div>
+                  <div class="vg-stdbook-cont-sidenav-button rrq-summary-button">SUMMARY</div>
+              </div>
+              <!------------------------------------------------------------------------------->
+          </div>
+          <!----------------------------------------------------------------------------------->
+      </div>
+
+      <!-- Ref Lists ------>
+      <div id="validation-list">
+          <datalist id="system-groups-list">
+          </datalist>
+          <datalist id="mod-add-items-list"></datalist>
+          <datalist id="mod-add-cat-list"></datalist>
+      </div>
+    </body>
+  <script src='../bin/gui/quoter.js'></script>
+</html>

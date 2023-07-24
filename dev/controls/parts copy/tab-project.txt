@@ -1,0 +1,61 @@
+
+
+<div class="viewcontrol-menu">
+  <div class="viewcontrol-menubox">
+    <div class="viewcontrol-menu-item" title="QUOTE"><div>Quote</div></div>
+    <div class="viewcontrol-menu-item" title="CUSTOMER"><div>Customer</div></div>
+    <div class="viewcontrol-menu-item" title="TRACKING"><div>Tracking</div></div>
+  </div>
+  <div class="viewcontrol-quick-actions"></div>
+</div>
+<div class="viewcontrol-port">
+  <div class="viewcontrol-port-item" title="QUOTE">
+    <div class="customer-edit-jinfo">
+      <div style="display:none;">Quote Number</div><input id="q-info-id" style="display:none";/>
+      <div>Quote Name</div><input id="q-info-name"/>
+    </div>
+    <hr>
+    <div class="customer-edit-jaddress">
+      <div>Street</div><input id="q-info-street"/>
+      <div>Unit</div><input id="q-info-unit"/>
+      <div>City</div><input id="q-info-city"/>
+      <div>State</div><input id="q-info-state"/>
+      <div>Zip</div><input id="q-info-zip"/>
+    </div>
+    <hr>
+    <div class="customer-edit-quotestatus">
+      <label>Quote Progress</label>
+      <select name="status" id="q-info-status">
+      </select>
+    </div>
+    <hr>
+    <div class="customer-edit-siteinfo">
+      <div class="customer-edit-utilities">
+        <div>Electric Company</div>
+        <select name="eleccomp" id="q-info-eleccomp">
+        </select>
+        <div>Gas Company</div>
+        <select name="gascomp" id="q-info-gascomp">
+        </select>
+      </div>
+    </div>
+    
+  </div>
+  <div class="viewcontrol-port-item" title="CUSTOMER">
+    <div class="customer-edit-cinfo">
+      <div>Cust Code</div><input id="q-customer-id"/>       <!--Create searchable/drop list for optional autofill-->
+      <div>Name</div><input id="q-customer-cname"/>
+      <div>Phone</div><input id="q-customer-cphone"/>
+      <div>Email</div><input id="q-customer-cemail" type="email"/>
+    </div>
+  </div>
+  <div class="viewcontrol-port-item" title="TRACKING">
+    <div class="customer-edit-tracking">
+      <div>Time of Day</div><select id="q-tracking-time" type="search"></select>
+      <div>Source</div><select id="q-tracking-source" type="search"></select>
+      <div>Lead</div><select id="q-tracking-lead" type="search"></select>
+      <div>Presented Date</div><input id="q-tracking-prstdate" type="date"/>
+      <div>Presented Via</div><select id="q-tracking-prstvia" type="search" list="track-prsntvia-droplist"></select>
+    </div>
+  </div>
+</div>

@@ -9,15 +9,7 @@ let prog = new App({
   settings:settings,
   access:config.access,
   controls:config.controls,
-  routes:{
-    'GOTOpresi':(eve,data)=>{
-      let answr = appproc.GOTOpresentation(eve,data);
-      if(answr.load){
-        viewtools.loader(controlsroot + 'presentation.html',stdwidth,stdheight,false,false,'hidden');
-      }
-      eve.sender.send(navroutes.gotopresi,answr);
-    }
-  }
+  mart:config.mart
 });
 
 /* LANDING PAGE
@@ -50,6 +42,15 @@ app.on('activate', () => {
 */
 
 /*
+  routes:{
+    'GOTOpresi':(eve,data)=>{
+      let answr = appproc.GOTOpresentation(eve,data);
+      if(answr.load){
+        viewtools.loader(controlsroot + 'presentation.html',stdwidth,stdheight,false,false,'hidden');
+      }
+      eve.sender.send(navroutes.gotopresi,answr);
+    }
+  }
 ipcMain.on(navroutes.gotopresi,(eve,data)=>{
   let answr = appproc.GOTOpresentation(eve,data);
   if(answr.load){

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <script>
+        require('../bin/repo/gui/js/tools/vg-partials.js').writePart(__dirname + '/parts/vg-heads.txt',
+                                                            document.head);
+      </script>
+      <link rel="stylesheet" type="text/css" href="../bin/repo/gui/styles/modules/vg-objecteditor.css"/>
+      <link rel="stylesheet" type="text/css" href="../bin/repo/gui/styles/layouts/vg-sidemenuview.css"/>
+      <link rel="stylesheet" type="text/css" href="../bin/gui/styles/settings.css"/>
+    </head>
+    <body>
+      <script>
+          require('../bin/repo/gui/js/tools/vg-partials.js').writePart(__dirname + '/parts/vg-notelist.txt',
+                                                            document.body, 'vg-toast-tr', true);
+      </script>
+      <style>
+        /*  TIER FORM */
+        #tier-form-featgroups>div>div{
+          display:flex;
+        }
+        #tier-form-featgroups>div>div:nth-child(1){
+          width:200px;
+        }
+        /*/////////////////////////////*/
+
+      </style>
+
+      <div id="settings-cont" class="sidemenuview-cont">
+        <div class="sidemenuview-menu">
+          <div class="sidemenuview-menu-item" title="admin-settings">ADMIN</div>
+          <div class="sidemenuview-menu-item" title="quote-settings">QUOTE</div>
+          <div class="sidemenuview-menu-item" title="user-settings">USERS</div>
+          <div class="sidemenuview-menu-item" title="connection-settings">CONNECTIONS</div>
+          <div class="sidemenuview-menu-item" title="pricekey-settings">PRICE KEY</div>
+          </div>
+        <div id="settings-editor" class="sidemenuview-views">
+          <div id="admin-settings" class="sidemenuview-view edit-object-cont">
+          </div>
+          <div id="quote-settings" class="sidemenuview-cont">
+            <div class="sidemenuview-menu">
+              <div class="sidemenuview-menu-item" title="quote-disc-settings">DISCOUNTS</div>
+              <div class="sidemenuview-menu-item" title="quote-finance-settings">FINANCING</div>
+              <div class="sidemenuview-menu-item" title="quote-tier-settings">TIERS</div>
+            </div>
+            <div class="sidemenuview-views">
+              <div id="quote-disc-settings" class="sidemenuview-view">
+                <div id="discounts-list">
+                </div>
+              </div>
+              <div id="quote-finance-settings" class="sidemenuview-view">
+                <div id="finance-list"></div>
+              </div>
+              <div id="quote-tier-settings" class="sidemenuview-view">
+                <div id="tier-list" class="vg-std-flextable"></div>
+                <div id="tier-form-cont">
+                  <input id="tier-form-code" />
+                  <input id="tier-form-name" />
+                  <input id="tier-form-color" type="color" />
+                  <div class="tier-button-container">
+                    <div id="tier-form-save" class="flat-action-button">SAVE</div>
+                    <div id="tier-form-delete" class="flat-action-button">DELETE</div>
+                  </div>
+                  <div id="tier-form-featgroups" class="vg-std-flextable">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="user-settings" class="sidemenuview-view">
+            <div id=user-list class="edit-object-cont"></div>
+            <div id=user-groups class="edit-object-cont"></div>
+          </div>
+          <div id="connection-settings" class="sidemenuview-view">
+          </div>
+          <div id="pricekey-settings" class="sidemenuview-view">
+            <div>Click to create new Price Key.</div>
+            <div id="admin-create-pricekey" class="flat-action-button">Create</div>
+          </div>
+        </div>
+      </div>
+    </body>
+    <script src='../bin/gui/settings.js'></script>
+</html>

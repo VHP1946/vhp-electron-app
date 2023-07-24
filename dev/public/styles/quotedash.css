@@ -1,10 +1,8 @@
 /*  QUOTE SUMMARY/SORT   */
 
 #dash-container{
-  display:grid;
-  grid-template-columns: 1fr 2fr;
-  justify-items: center;
-  align-items: center;
+  display: flex;
+  justify-content: space-around;
   padding: 10px 0px;
 }
 #quote-tables-container>div>div>.viewcontrol-quick-actions{
@@ -23,6 +21,11 @@
 
 #note-504{
   display:none;
+}
+#note-beta{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }
 
 /* Quote Table Filters */
@@ -75,22 +78,17 @@
   row-gap: 5px;
   padding: 5px;
 }
-.preview-area-system{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: 10px;
-  padding: 0px 5px;
+.preview-area-status{
+  display: flex;
+  justify-content: space-around;
 }
-.preview-area-option>div:first-child{
-  font-weight: bold;
-}
-.noprice-note{
-  font-style: italic;
-  text-align: center;
-  padding: 10px;
+.preview-area-status>select{
+  width: 90px;
 }
 .preview-area-buttons{
+  margin-top: 10px;
   padding: 5px;
+  width: 350px;
   display: flex;
   justify-content: space-between;
 }
@@ -117,11 +115,5 @@
   display: flex;
   justify-content: flex-end;
 }
-
-
-#quote-center>.vg-float-view:nth-child(2){
-  width: 500px;
-}
-
 
 @page{size:8.5in 11in;}
