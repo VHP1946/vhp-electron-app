@@ -13,9 +13,6 @@ let prog = new App({
 });
 
 
-let setuproutes = require('./routes.js');
-
-prog.ADDroutes(setuproutes(prog));
 
 
 
@@ -25,12 +22,10 @@ prog.ADDroutes(setuproutes(prog));
 
 
 
-
-
-prog.store['quotes'].ROUTEmart({
+prog.store['pricekey'].ROUTEmart({
   method:'QUERY',
-  options:{query:{estimator:'VOGGR'}}
-}).then(answr=>{})
+  options:{query:{}}
+}).then(answr=>{console.log('PRICING ',answr)})
 
 /* LANDING PAGE
     The landing page will more often be the login screen

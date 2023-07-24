@@ -46,6 +46,8 @@ module.exports = class AppMart{
     constructor({
       vapihpack=null,
       sync=false,
+      offline=false,
+      user=false,
       root='',
       locstore={
         file:'',
@@ -53,10 +55,10 @@ module.exports = class AppMart{
       }
     }){
       //ensure local mart root is created
-        this.root = root; //root to app folder mart
+        this.root = path.join(root,'mart'); //root to app folder mart
         try{fs.mkdirSync(this.root);}catch{}//ensure folder exist
         this.config=null;
-        this.setsfile = path.join(this.root,'storestatus.json');
+        this.setsfile = path.join(root,'storestatus.json');
         try{this.config = require(this.setsfile);}//try to get settings file
         catch{//create the file
             this.config = {

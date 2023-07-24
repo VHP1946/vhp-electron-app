@@ -47,8 +47,10 @@ module.exports = class AppManager {
     //loop though mart, setup marts *NOT STARTED*
     this.store = {};
     for(let m in mart){
-      mart[m].root=path.join(this.fx.approot,'mart');
-      this.store[m]=new AppMart(mart[m]);
+      this.store[m]=new AppMart({
+        ...mart[m],
+        root:this.fx.approot
+      });
     }
 
     this.controls = new AppViews(controls);

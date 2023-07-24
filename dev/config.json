@@ -67,8 +67,9 @@
                 "collect":"Quote350"
             },
             "sync":true,
+            "offline":true,
+            "user":true,
             "locstore":{
-                "folder":"/test/",
                 "file":"quotes.db",
                 "ensure":{
                     "fieldName":"id",
@@ -79,14 +80,15 @@
         "pricekey":{
             "vapihpack":{
                 "db":"Replacement",
-                "collect":"Pricekey350"
+                "collect":"Pricing350"
             },
-            "sync":false,
+            "sync":true,
+            "offline":false,
+            "user":false,
             "locstore":{
-                "folder":"/test/",
                 "file":"pricekeys.db",
                 "ensure":{
-                    "fieldName":"id",
+                    "fieldName":"version",
                     "unique":true
                 }
             }
