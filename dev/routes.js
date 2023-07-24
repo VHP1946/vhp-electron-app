@@ -22,7 +22,8 @@ ipcMain.on('view-minimize',(eve,data)=>{
   });
 
 /** */
-module.exports={
+module.exports=(vhpapp)=>{
+  return{
     loadQuote:(eve,data)=>{
         let isopen = false;
         if(data.id&&data.id!=undefined){ //check data.id
@@ -153,4 +154,5 @@ module.exports={
           eve.sender.send(quoteroutes.refreshquotekey,{msg:'Key was updated!',key:key});
         }else{eve.sender.send(quoteroutes.refreshquotekey,{msg:'Key is not available',key:null})}
     }
+  }
 }

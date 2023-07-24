@@ -4,14 +4,13 @@ const $ = require('jquery'),
 var {ipcRenderer}=require('electron');
 
 
-let route = 'store';
+let route = 'openFolder';
 ipcRenderer.send(route,{
-    store:'quotes',
-    pack:{
-        method:'QUERY',
-        options:{query:{estimator:'VOGGR'}}
-    }
+    drive:'cdrive'
 });
 ipcRenderer.on(route,(eve,data)=>{
+    if(data){
+        //empty
+    }
     console.log(route,data);
 })

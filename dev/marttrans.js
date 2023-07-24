@@ -8,17 +8,24 @@ let API = new Core({
     sync:false, 
     dev:{comments:true}
 });
+let pkey = require('./pricekey.json');
+
 
 
 let fpack={
-    db:'Quotes',
-    collect:'Quote350',
+    db:'Replacement',
+    collect:'Pricing350',
     method:'QUERY',
     options:{
         query:{}
     }
 }
-
-API.SENDrequest({pack:fpack,route:'STORE',request:'MART'}).then(answr=>{
+let ipack={
+    db:'Replacement',
+    collect:'Pricing350',
+    method:'INSERT',
+    options:{docs:pkey}
+}
+API.SENDrequest({pack:ipack,route:'STORE',request:'MART'}).then(answr=>{
     console.log(answr);
 })

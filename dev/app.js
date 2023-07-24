@@ -12,6 +12,26 @@ let prog = new App({
   mart:config.mart
 });
 
+
+let setuproutes = require('./routes.js');
+
+prog.ADDroutes(setuproutes(prog));
+
+
+
+
+
+
+
+
+
+
+
+prog.store['quotes'].ROUTEmart({
+  method:'QUERY',
+  options:{query:{estimator:'VOGGR'}}
+}).then(answr=>{})
+
 /* LANDING PAGE
     The landing page will more often be the login screen
     This login screen can be skipped by editing the
