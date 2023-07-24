@@ -1,0 +1,140 @@
+
+#quote-edit-container{
+position:fixed;
+top:0px;
+left:0px;
+height:100%;
+width:100%;
+background-color: rgba(196, 209, 253,.4);
+    
+}
+
+#quote-edit-container>div{
+    margin:100px 200px 0px 200px;
+    padding:10px;
+    height:400px;
+    background-color: var(--color-2);
+    border: 5px solid var(--border-color-1);
+
+}
+
+#quote-edit-module{
+    display:grid;
+    grid-template-columns: repeat(2,1fr);
+}
+
+#quote-edit-options{
+    grid-row: 4;
+    grid-column: 1 /span 2;
+    justify-self: end;
+    align-self: end;
+    display: flex;
+}
+#quote-edit-options>div{
+    width: 80px;
+    padding: 5px;
+
+    background-color: var(--color-1);
+    color:rgb(255, 255, 255);
+    border-right: 1px solid var(--border-color-1);
+    text-align: center;
+}
+#quote-edit-options>div:hover{
+    opacity: .4;
+    cursor:pointer;
+}
+#quote-edit-info{
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+}
+#quote-edit-info>div{
+    align-self:center;
+    justify-self: center;
+    text-align: center;
+    height:50%;
+}
+#quote-edit-info>div:nth-child(even){
+    font-size: 15pt;
+}
+#quote-edit-info>div:nth-child(odd){
+    width:50px;
+    height:20px;
+    padding-top:10px;
+    align-self:start;
+    
+    border-bottom:2px solid var(--border-color-1);
+}
+
+/*////////////////////////////////////////////////*/
+
+
+#quote-edit-comments{
+    grid-row:1/span 2;
+}
+#quote-edit-comments>div:nth-child(1){
+    width:50%;
+    height:40px;
+    border: 1px solid var(--border-color-1);
+}
+#edit-comments{
+    height:100%;
+    border:1px solid var(--border-color-1);
+}
+
+/*////////////////////////////////////////////////*/
+
+#quote-edit-inputs{
+    display:grid;
+    grid-template-columns: repeat(2,2fr);
+    grid-row: 2;
+    grid-column: 2;
+}
+#quote-edit-inputs:nth-child(n){
+    height:50px;
+}
+#quote-edit-inputs>input{
+    text-align: center;
+}
+#quote-edit-inputs>div{
+    padding:5px 15px 5px 15px;
+    justify-self: end;
+}
+#edit-paid{
+    width:70px;
+}
+#edit-status{
+    width:60px;
+}
+
+/*////////////////////////////////////////////////*/
+
+
+#quote-edit-techinfo{
+    display:grid;
+    grid-template-columns: repeat(2,2fr);
+    grid-column: 2;
+    margin:10px;
+}
+#quote-edit-techinfo>div{
+    justify-self: center;
+    align-self: center;
+    text-align: center;
+}
+#quote-edit-techinfo>div:nth-child(n+2){
+    height: 70%;
+    width:100%;
+}
+#ref-edit-techinfo>div:nth-child(2){
+    border-right:1px solid var(--border-color-1)
+}
+#edit-techid{
+    grid-column: 1 / span 2;
+    border-bottom: 1px solid var(--border-color-1);
+    height: 50%;
+    width:60%;
+}
+
+#edit-spifffor{
+    justify-self: center;
+    align-self:center;
+}

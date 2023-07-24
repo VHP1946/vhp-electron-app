@@ -1,0 +1,119 @@
+/* General Rules */
+:root{
+  --BEE-blue: rgb(15,70,119);
+  --BEE-mblue: rgb(41,137,195);
+  --BEE-grey: rgb(103,104,103);
+
+  --BCE-green: rgb(107,164,58);
+  
+  --vogel-blue: rgb(33, 57, 130);
+  --vogel-red: rgb(230,0,0);
+  
+  --background-base: white;
+  --background-light: rgb(229,229,253);
+  --background-dark:rgb(112, 128, 157);
+
+  --highlight-color:rgb(196, 209, 253);
+
+  --text-light: white;
+  --text-dark: rgb(73,73,73);
+
+  --warning-highlight:rgba(255, 100, 100, 1);
+}
+*{
+  user-select:none;
+  box-sizing: border-box;
+}
+html{
+  height: 100vh;
+  width: 100vw;
+}
+body:hover{
+  cursor: default;
+}
+/* Inputs */
+.vg-checkbox{
+    border: 1px solid black;
+    height: 15px;
+    width: 15px;
+    margin: 5px;
+    border-radius: 3px;
+}
+.vg-checkbox-checked{
+  background-color: var(--background-light);
+}
+.vg-checkbox-checked::after{
+  content: "\2713";
+  position: relative;
+  font-weight:bold;
+  top:-10px;
+}
+
+/* Center Box */
+.vg-note-center-box{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(3px 3px 5px black);
+}
+[id*="beeq-ibox-"]{
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  column-gap: 5px;
+  background-color: var(--background-base);
+  padding: 5px 15px 5px 5px;
+  border: 3px solid black;
+  align-items: center;
+  row-gap: 5px;
+}
+.info-nav-button{
+  height: 35px;
+  width: 35px;
+  margin: 10px;
+}
+
+/* Edge Sliders */
+.vg-utilcont-toggle:hover{
+  cursor: pointer;
+}
+.vg-utilcont-info{
+  display:none;
+}
+#vg-utilcont-top{
+  position:fixed;
+  z-index: 10;
+  top:0;
+  width:100%;
+}
+#vg-top-toggle{
+  height:30px;
+  width:100%;
+  background: linear-gradient(to bottom, var(--BEE-blue), rgba(0,0,0,.1)); 
+}
+
+/* Toast Popouts */
+#vg-toast-tr{
+  position: fixed;
+  background-color: white;
+  right:0px;
+  top: 20px;
+  filter: drop-shadow(3px 3px 5px black);
+  z-index: 100;
+}
+[class*="vg-toast-"]{
+  padding:10px 15px;
+}
+.vg-toast-red{
+  background-color: rgba(255,0,0,.25);
+  border: 3px solid red;
+}
+.vg-toast-yellow{
+  background-color: rgba(255, 255, 0,.25);
+  border: 3px solid yellow;
+}
+.vg-toast-green{
+  background-color: rgba(0,255,0,.25);
+  border: 3px solid green;
+}
+

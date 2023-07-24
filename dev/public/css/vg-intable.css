@@ -1,0 +1,66 @@
+.intable-bottom-add-cont{
+    border: 2px solid var(--background-dark);
+    border-top: 0px;
+}
+.intable-bottom-add-cont>div{ 
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--background-dark);
+}
+.intable-bottom-add-cont>:nth-child(2n){
+    background-color: var(--background-light);
+}
+.intable-bottom-add-cont>:first-child{
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    padding:0px;
+    position: sticky;
+    top:0px;
+    z-index: 1;
+}
+.intable-bottom-add-cont>:last-child{
+    background-color: var(--background-base);
+    padding:0px;
+    margin-top: 10px;
+    border-bottom: 0px;
+}
+.intable-bottom-add-row-values{
+    display:flex;
+    justify-content: space-around;
+}
+[class="intable-bottom-add-row-values"] :nth-child(n){
+    min-width:15%;
+    text-align: center;
+}
+.intable-bottom-add-row-values >:last-child >input::after{
+    content:"<-- Add New Item";
+
+}
+.intable-bottom-add-row-util{
+    display: flex;
+    justify-content: space-around;
+    font-size: .85em;
+    word-wrap: break-word;
+}
+.intable-bottom-add-row-util>div>input{
+    cursor: pointer;
+}
+.intable-row-delete{
+    background-image: linear-gradient(to right, var(--warning-highlight),rgba(0,0,0,0),var(--warning-highlight));
+}
+.intable-actions{
+    display:flex;
+    justify-content: flex-end;
+}
+.intable-action-delete{
+    padding: 10px;
+}
+.intable-action-delete:hover{
+    cursor:pointer;
+    background-color: var(--warning-highlight);
+}
+.intable-bottom-add-cont::after{
+    font-size: small;
+    float:right;
+    content: "*Click and Hold to Select a Row, Double Click Button to Delete";
+}

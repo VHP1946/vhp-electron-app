@@ -1,0 +1,161 @@
+/* Presentation display settings -----------------------------------------*/
+#present-cont{
+    font-size: 1.1em;
+    text-align: center;
+}
+/* All Titles */
+.present-title{
+    width:100%;
+    padding: 0px;
+    font-size: 1.2em;
+    color: var(--text-light);
+    background-color: var(--BEE-blue);
+}
+.present-subtitle{
+    font-size: .75em;
+}
+/* Header */
+#present-header{
+    display:grid;
+    grid-template-columns: repeat(12, 8.333%);
+    margin-bottom: 10px;
+}
+#header-logo{
+    max-width: 275px;
+    grid-column: 1 / 4;
+    place-self: start stretch;
+}
+#present-quote-info{
+    grid-column: 4 / 10;
+}
+#quote-window-number{
+    font-size: 1.25em;
+}
+#quote-window-number:before{
+    content: "(";
+}
+#quote-window-number:after{
+    content: ")";
+}
+#present-quote-info>:nth-child(-n+2){
+    margin:0;
+    font-size: 1.75em;
+    font-weight: bold;
+    top: -5px;
+}
+#present-quote-info div:first-child::after{
+    content: "'s";
+}
+#present-customer-info{
+    grid-column: -1 / 10;
+    display:grid;
+    grid-template-columns: 100%;
+    text-align: right;
+    font-size: .8em;
+}
+
+
+/* Window Features and Benefits */
+#present-window-headers,#present-window-benifits,#present-investment-list{
+    display:grid;
+    padding: 5px 40px 10px 40px;   
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 40px;
+    justify-items: center;
+}
+#present-window-headers{
+    padding-bottom:0px;
+}
+.present-window-tier{
+    font-size: 1.6em;
+    font-weight: bold;
+    padding-right: 5px;
+}
+.present-window-model{
+    font-size: 1.3em;
+    padding-left:4px;
+    border-top: 2px solid var(--BEE-blue);
+    border-left: 2px solid var(--BEE-blue);
+}
+
+/* Window Options and Upgrades */
+#present-window-options-list,#present-addition-list,#present-glassblock-list {
+    display: grid;
+    padding: 5px 40px 10px 40px;
+    grid-template-columns: 1fr;
+    column-gap: 40px;
+}
+#present-window-note{
+    grid-column: -2 / span 1;
+    place-self: end end;
+    font-size: .75em;
+}
+
+/* Window Trim */
+#present-window-trim-list {
+    display: grid;
+    padding: 5px 40px 10px 40px;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 40px;
+}
+.present-window-trim{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+.present-window-trim>div{
+    margin: 0px 10px 0px 10px;
+}
+.present-window-trim>div:nth-child(2)::before{
+    content:"$";
+    vertical-align: super;
+    font-size: .5em;
+}
+
+/* Glass Block */
+
+/* Additional Items */
+
+/* Present Investment */
+
+.present-investment>div{
+    text-align: center;
+}
+.present-investment-monthly{
+    font-size: 2.5em;
+    grid-column: 1;
+    grid-row: 1;
+    place-self: end end;
+}
+.present-investment-monthly::after{
+    font-size: .5em;
+    content:"/mo.";
+}
+.present-investment-monthly::before{
+    content:"$";
+    vertical-align: super;
+    font-size: .5em;
+}
+.present-investment-total{
+    font-size: 1.75em;
+    grid-column: 1 / span all;
+    grid-row: 3;
+    border-top: 2px solid var(--BEE-grey);
+}
+.present-investment-total::before{
+    content:"$";
+    vertical-align: super;
+    font-size: .5em;
+}
+.present-investment-total::after{
+    content: " Net Cash";
+    font-size: .75em;
+}
+.present-investment{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+}
+.present-finance-title{
+    font-size: .8em;
+    place-self: center center;
+}
