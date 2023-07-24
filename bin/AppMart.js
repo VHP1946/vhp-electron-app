@@ -46,7 +46,6 @@ module.exports = class AppMart{
     constructor({
       vapihpack=null,
       sync=false,
-      
       root='',
       locstore={
         file:'',

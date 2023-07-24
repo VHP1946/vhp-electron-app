@@ -45,11 +45,9 @@ module.exports = class AppManager {
       userfile:path.join(this.fx.lsroot,'userset.json')
     });
     //loop though mart, setup marts *NOT STARTED*
-    console.log('MART settings ',mart);
-    mart.root = path.join(this.fx.approot,'mart');
-    console.log('MART settings ',mart);
     this.store = {};
     for(let m in mart){
+      mart[m].root=path.join(this.fx.approot,'mart');
       this.store[m]=new AppMart(mart[m]);
     }
 
