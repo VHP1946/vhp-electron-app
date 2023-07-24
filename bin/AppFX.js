@@ -21,10 +21,11 @@ module.exports = class AppFX{
 
         let userfilepath = path.join(this.lsroot,'userconfig.json');
         if(!fs.existsSync(userfilepath)){fs.writeFileSync(userfilepath,'{}')}//setup userconfig file
-
-        this.approot = this.app?path.join(this.lsroot,app):null;//assign app folder path
+        
+        this.approot = app?path.join(this.lsroot,app):path.join(this.lsroot,'unkown');//assign app folder path
         if(this.approot){if(!fs.existsSync(this.approot)){fs.mkdirSync(this.approot);}}//setup app folder if needed
 
+        
         
         //this.setsfile = path.join(this.root,'storesettings.json');
         this.routes={

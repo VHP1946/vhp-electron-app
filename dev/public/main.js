@@ -4,12 +4,13 @@ const $ = require('jquery'),
 var {ipcRenderer}=require('electron');
 
 
-let route = 'jsonTOexcel';
+let route = 'store';
 ipcRenderer.send(route,{
-    drive:'cdrive',
-    epath:'/dev/test.xlsx',
-    data:[{test:3}],
-    open:true
+    store:'quotes',
+    pack:{
+        method:'QUERY',
+        options:{query:{estimator:'VOGGR'}}
+    }
 });
 ipcRenderer.on(route,(eve,data)=>{
     console.log(route,data);

@@ -13,7 +13,7 @@ const path = require('path');
 const AppFX = require('./bin/AppFX.js');
 const AppUser = require('./bin/AppUser.js');
 const AppViews = require('./bin/AppViews.js');
-//const AppMart = require('./bim/mart.js');
+const AppMart = require('./bin/AppMart.js');
 
 module.exports = class AppManager {
   /** App Manager
@@ -44,11 +44,28 @@ module.exports = class AppManager {
       ...access,
       userfile:path.join(this.fx.lsroot,'userset.json')
     });
-    //this.mart = new AppMart(mart);//setup mart
+    //loop though mart, setup marts *NOT STARTED*
+    console.log('MART settings ',mart);
+    mart.root = path.join(this.fx.approot,'mart');
+    console.log('MART settings ',mart);
+    this.store = {};
+    for(let m in mart){
+      this.store[m]=new AppMart(mart[m]);
+    }
+
     this.controls = new AppViews(controls);
 
     this.routes = [];
     this.setupRoutes({
+      store:(eve,data)=>{
+        console.log('Request to mart',data);
+        if(this.store[data.store]){
+          this.store[data.store].ROUTEmart(data.pack).then(answr=>{
+            console.log('End of Routes ',answr);
+            eve.sender.send('store',answr);
+          });
+        }else{eve.sender.send('store',{success:false,msg:'Store does exists!',result:[]})}
+      },
       ...routes,
       ...this.fx.routes
     });

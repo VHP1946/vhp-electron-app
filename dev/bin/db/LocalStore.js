@@ -5,49 +5,22 @@ const fs = require('fs');
 const {NEDBconnect} = require('../repo/tools/box/nedb-connector.js');
 const {Store} = require("vhp-api");
 
-/**
- * 
-    vapihpack:{
-        collect:"apps",
-        store:"RRQ",
-        db:"mquotes"
-    },
-    locstore:{
-        folder:'/rrq/',
-        file:'userquotes.db',
-        ensure:{
-            fieldName:'id',
-            unique:true
-        }
-    },
-    apiargs:{
-        core:{
-            auth:{user:'VOGCH',pswrd:'vogel123'},
-            client:false,
-            dev:{
-                https:true,
-                comments:false
-            }
-        }
-    }
- */
 class LocalMart{
     /**
      * 
      * @param {*} param0 
      */
     constructor({
-      app=null,
-      approot='',
       vapihpack=null,
       locstore={
+        folder:'',
         file:'',
         ensure:null
       },
       apiargs={}
     }){
-        this.root = root; //root to app folder
-        this.folder = path.join();
+        this.root = 'C:/IMDB/'
+        this.folder = path.join(this.root,locstore.folder);
         this.file = locstore.file;
         this.setsfile = path.join(this.root,'storesettings.json');
 
@@ -57,12 +30,12 @@ class LocalMart{
         this.config=null;
     
         try{//try to get the file
-            this.config = require(this.setsfile);
+            this.config = require(path.join(this.folder,this.file+'.json'));
         }catch{//create the file
             this.config = {
-              cansync:true, //user allowed to sync to master
-              needsync:false, //user needs to sync to master
-              connected:true //user has internet connection
+            cansync:true, //user allowed to sync to master
+            needsync:false, //user needs to sync to master
+            connected:true //user has internet connection
             }
             fs.writeFileSync(this.setsfile,JSON.stringify(this.config));
         }
@@ -72,6 +45,8 @@ class LocalMart{
         
         this.vapi=new Store.Mart({...apiargs});
         this.vapihpack = vapihpack;
+
+        console.log('CONFIG >',this.config)
     }
 
     QUERYlocal=(flts={})=>{
@@ -363,6 +338,7 @@ class LocalMart{
         return true;
     }
 
+    
     REFRESHlocal=(list=null)=>{
       return new Promise((resolve,reject)=>{
         this.local.REMOVEdoc({},{multi:true}).then(({err,num})=>{
@@ -479,7 +455,10 @@ class LocalMart{
           });
         }else{return resolve(false)}
       });
-    }  
+    }
+  
+  
+     
 }
 
 module.exports={LocalMart}

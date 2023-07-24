@@ -59,5 +59,48 @@
             "settings/":{},
             "main":{}
         }
+    },
+    "mart":{
+        "quotes":{
+            "vapihpack":{
+                "db":"Replacement",
+                "collect":"Quote350"
+            },
+            "sync":true,
+            "locstore":{
+                "folder":"/test/",
+                "file":"quotes.db",
+                "ensure":{
+                    "fieldName":"id",
+                    "unique":true
+                }
+            }
+        },
+        "pricekey":{
+            "vapihpack":{
+                "db":"Replacement",
+                "collect":"Pricekey350"
+            },
+            "sync":false,
+            "locstore":{
+                "folder":"/test/",
+                "file":"pricekeys.db",
+                "ensure":{
+                    "fieldName":"id",
+                    "unique":true
+                }
+            }
+        }
+    },
+    "vapiconfig":{
+        "core":{
+            "auth":{"user":"VOGCH","pswrd":"vogel123"},
+            "client":true,
+            "host":"http://18.191.223.80/",
+            "dev":{
+                "https":false,
+                "comments":true
+            }
+        }
     }
 }
