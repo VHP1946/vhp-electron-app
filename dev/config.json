@@ -66,9 +66,11 @@
                 "db":"Replacement",
                 "collect":"Quote350"
             },
-            "sync":true,
-            "offline":true,
-            "user":true,
+            "data":{
+                "type":"backup",
+                "sync":false
+            },
+            "type":"sync",
             "locstore":{
                 "file":"quotes.db",
                 "ensure":{
@@ -82,9 +84,10 @@
                 "db":"Replacement",
                 "collect":"Pricing350"
             },
-            "sync":true,
-            "offline":false,
-            "user":false,
+            "data":{
+                "type":"offline",
+                "sync":true
+            },
             "locstore":{
                 "file":"pricekeys.db",
                 "ensure":{

@@ -2,21 +2,21 @@
 
 const {ipcRenderer} = require('electron');
 
-var {quotels}=require('../js/lstore.js');
-var {dashroutes}=require('../js/routes.js');
+var {quotels}=require('../public/js/lstore.js');
+var {dashroutes}=require('../public/js/routes.js');
 
-var {stdbook}=require('../bin/repo/gui/js/layouts/vg-stdbook.js');
+var {stdbook}=require('../public/bin/repo/gui/js/layouts/vg-stdbook.js');
 
-var {WinBuild}=require('../js/winquote.js');
-var {GBlockBuild}=require('../js/gbquote.js');
-var {AddBuild}=require('../js/additquote.js');
-var {InsulBuild}=require('../js/insulquote.js');
+var {WinBuild}=require('../public/js/winquote.js');
+var {GBlockBuild}=require('../public/js/gbquote.js');
+var {AddBuild}=require('../public/js/additquote.js');
+var {InsulBuild}=require('../public/js/insulquote.js');
 
-var {WindowKey}=require('../js/keymaker.js');
+var {WindowKey}=require('../public/js/keymaker.js');
 
-var {qvdom,BEEQuote,beequot}=require('../js/beequote.js');
-var {vudom,SETupdownside,CollapseEdge}=require('../js/vg-util-updownside.js');
-var {DropNote}=require('../js/vg-poppers.js');
+var {qvdom,BEEQuote,beequot}=require('../public/js/beequote.js');
+var {vudom,SETupdownside,CollapseEdge}=require('../public/js/vg-util-updownside.js');
+var {DropNote}=require('../public/js/vg-poppers.js');
 
 var refreshkey = false;
 var beeq = null; //BEEquote class object
@@ -86,9 +86,9 @@ var LOADqlist = (aquote)=>{
 
 /*Get an upto date price key
 */
-ipcRenderer.send(dashroutes.getkey,'GET');
+ipcRenderer.send('getPriceKey',null);
 
-ipcRenderer.on(dashroutes.getkey,(eve,data)=>{
+ipcRenderer.on('getPriceKey',(eve,data)=>{
     if(data){
       if(!refreshkey){
         DropNote('tr','KEY IS UPDATED!','green');

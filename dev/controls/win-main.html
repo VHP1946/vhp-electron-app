@@ -5,25 +5,25 @@
         <script> window.$ = window.jQuery = require("jquery");</script>
 
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Oswald"/>
-        <link rel="stylesheet" type="text/css" href="../css/vg-stdbook.css"/>
-        <link rel="stylesheet" type="text/css" href="../css/quote-general.css"/>
-        <link rel="stylesheet" type="text/css" href="../css/quote-summary.css"/>
-        <link rel="stylesheet" type="text/css" href="../css/quote-presentation.css"/>
-        <link rel="stylesheet" type="text/css" href="../css/vg-intable.css"/>
-        <link rel="stylesheet" type="text/css" href="../css/vg-utility.css"/>
+        <link rel="stylesheet" type="text/css" href="../public/css/vg-stdbook.css"/>
+        <link rel="stylesheet" type="text/css" href="../public/css/quote-general.css"/>
+        <link rel="stylesheet" type="text/css" href="../public/css/quote-summary.css"/>
+        <link rel="stylesheet" type="text/css" href="../public/css/quote-presentation.css"/>
+        <link rel="stylesheet" type="text/css" href="../public/css/vg-intable.css"/>
+        <link rel="stylesheet" type="text/css" href="../public/css/vg-utility.css"/>
     </head>
     <body>
 
       <div id="vg-utilcont-top" class="vg-utilcont" >
         <div class="vg-utilcont-top-info vg-utilcont-info">
             <div id="vg-top-info-cont">
-            <img src="../images/icons/user.png" class="wo-nav-icon" alt="LOGIN">
-            <img id="quote-dash-toggle" src="../images/icons/layers.png" class="wo-nav-icon" alt="SOMET">
+            <img src="../public/images/icons/user.png" class="wo-nav-icon" alt="LOGIN">
+            <img id="quote-dash-toggle" src="../public/images/icons/layers.png" class="wo-nav-icon" alt="SOMET">
             <div id="quote-mode-toggle">
                 <div class="mode-selected" id="consult-mode" >CONSULTATION MODE</div>
                 <div class="mode-nselected" id="present-mode">PRESENTATION MODE</div>
             </div>
-            <img id="beeq-info-navbar" src="../images/icons/info.png" class="wo-nav-icon" alt="INFO">
+            <img id="beeq-info-navbar" src="../public/images/icons/info.png" class="wo-nav-icon" alt="INFO">
         </div>
             <!--  WO Editor
                   here the tech will be able to
@@ -51,20 +51,20 @@
       <!-- CENTER BOX ------>
       <div class="vg-note-center-box">
         <div id="beeq-ibox-navbar" style="display:none">
-            <img class="info-nav-button" src="../images/icons/user.png" alt="LOGIN"><div>Click to Log In/Out</div>
-            <img class="info-nav-button" src="../images/icons/layers.png" alt="QUOTES"><div>Click to Toggle Quote List</div>
+            <img class="info-nav-button" src="../public/images/icons/user.png" alt="LOGIN"><div>Click to Log In/Out</div>
+            <img class="info-nav-button" src="../public/images/icons/layers.png" alt="QUOTES"><div>Click to Toggle Quote List</div>
         </div>
         <div id="beeq-ibox-quote" style="display:none">
-            <img class="info-nav-button" src="../images/icons/disk.png" alt="SAVE"><div>Click to Save Current Quote</div>
-            <img class="info-nav-button" src="../images/icons/trash.png" alt="DELETE"><div>Click to Delete Current Quote</div>
-            <img class="info-nav-button" src="../images/icons/cross.png" alt="CLEAR"><div>Click to Clear and Start New Quote</div>
-            <img class="info-nav-button" src="../images/icons/key.png" alt="REFRESH"><div>Click to Refresh Key</div>
+            <img class="info-nav-button" src="../public/images/icons/disk.png" alt="SAVE"><div>Click to Save Current Quote</div>
+            <img class="info-nav-button" src="../public/images/icons/trash.png" alt="DELETE"><div>Click to Delete Current Quote</div>
+            <img class="info-nav-button" src="../public/images/icons/cross.png" alt="CLEAR"><div>Click to Clear and Start New Quote</div>
+            <img class="info-nav-button" src="../public/images/icons/key.png" alt="REFRESH"><div>Click to Refresh Key</div>
         </div>
         <div id="beeq-ibox-summary" style="display:none">
-            <img class="info-nav-button" src="../images/icons/print.png" alt="PRINT"><div>Click to Print the Current Quote</div>
+            <img class="info-nav-button" src="../public/images/icons/print.png" alt="PRINT"><div>Click to Print the Current Quote</div>
         </div>
         <div id="beeq-ibox-present" style="display:none">
-            <img class="info-nav-button" src="../images/icons/print.png" alt="PRINT"><div>Click to Print the Current Quote</div>
+            <img class="info-nav-button" src="../public/images/icons/print.png" alt="PRINT"><div>Click to Print the Current Quote</div>
         </div>
       </div>
 
@@ -406,7 +406,7 @@
                     <div id="quoteview-present" style="display: none;">
                         <div id="present-cont">
                             <div id="present-header"> <!--PRESENTATION HEADER-->
-                                <img src="../images/BEE logo.png" alt="BEE" id="header-logo">
+                                <img src="../public/images/BEE logo.png" alt="BEE" id="header-logo">
                                 <div id="present-quote-info">
                                     <div id="present-customer-title">Quote Name</div>
                                     <div>Personalized Window Solutions</div>
@@ -565,14 +565,14 @@
                 <div class="vg-stdbook-cont-sidenav vg-stdbook-cont-sidenav-right">
                     <div class="vg-stdbook-cont-sidenav-button quoteview-customer-button vg-stdbook-cont-sidenav-button-selected">QUOTE INFO
                         <div>
-                            <img id="beeq-save-quote" class="quote-nav-button" src="../images/icons/disk.png" alt="SAVE">
-                            <img id="beeq-close-quote" class="quote-nav-button" src="../images/icons/cross.png" alt="CLEAR">
-                            <img id="beeq-delete-quote" class="quote-nav-button" src="../images/icons/trash.png" alt="DELETE">
+                            <img id="beeq-save-quote" class="quote-nav-button" src="../public/images/icons/disk.png" alt="SAVE">
+                            <img id="beeq-close-quote" class="quote-nav-button" src="../public/images/icons/cross.png" alt="CLEAR">
+                            <img id="beeq-delete-quote" class="quote-nav-button" src="../public/images/icons/trash.png" alt="DELETE">
 
                         </div>
                         <div class="q-bottom-nav-buttons">
-                            <img id="q-refresh-key" class="quote-nav-button" src="../images/icons/key.png" alt="REFRESH">
-                            <img id="beeq-info-quote" class="quote-nav-button" src="../images/icons/info.png" alt="INFO">
+                            <img id="q-refresh-key" class="quote-nav-button" src="../public/images/icons/key.png" alt="REFRESH">
+                            <img id="beeq-info-quote" class="quote-nav-button" src="../public/images/icons/info.png" alt="INFO">
                         </div>
                     </div>
                     <div class="vg-stdbook-cont-sidenav-button quoteview-build-button">WINDOWS</div>
@@ -580,18 +580,18 @@
                     <div class="vg-stdbook-cont-sidenav-button quoteview-additions-button">ADDITIONS</div>
                     <div class="vg-stdbook-cont-sidenav-button quoteview-summary-button">SUMMARY
                         <div>
-                            <img id="beeq-print-summary" class="quote-nav-button" src="../images/icons/print.png" alt="PRINT">
+                            <img id="beeq-print-summary" class="quote-nav-button" src="../public/images/icons/print.png" alt="PRINT">
                         </div>
                         <div class="q-bottom-nav-buttons">
-                            <img id="beeq-info-summary" class="quote-nav-button" src="../images/icons/info.png" alt="INFO">
+                            <img id="beeq-info-summary" class="quote-nav-button" src="../public/images/icons/info.png" alt="INFO">
                         </div>
                     </div>
                     <div class="vg-stdbook-cont-sidenav-button quoteview-present-button">PRESENTATION
                         <div>
-                            <img id="beeq-print-present" class="quote-nav-button" src="../images/icons/print.png" alt="PRINT">
+                            <img id="beeq-print-present" class="quote-nav-button" src="../public/images/icons/print.png" alt="PRINT">
                         </div>
                         <div class="q-bottom-nav-buttons">
-                            <img id="beeq-info-present" class="quote-nav-button" src="../images/icons/info.png" alt="INFO">
+                            <img id="beeq-info-present" class="quote-nav-button" src="../public/images/icons/info.png" alt="INFO">
                         </div>
                     </div>
                 </div>
@@ -618,7 +618,7 @@
 
     </body>
 
-  <script src='../js/vg-quoter.js'>
+  <script src='../public/js/vg-quoter.js'>
 
   </script>
 

@@ -13,5 +13,32 @@ let prog = new App({
 });
 
 
+let routes = {
+  /**
+   * Returns a price key by version.
+   * if a version is not passed, the newest
+   * version is returned
+   * 
+   * 
+   * @param {*} eve 
+   * @param {String} data -> version
+   */
+  getPriceKey:(eve,data)=>{
+
+    prog.mart.ROUTEstore({
+      store:'pricekey',
+      pack:{
+        method:'QUERY',
+        options:{query:{version:data}}
+      }
+    })
+  },
+
+  createQuote:(eve,data)=>{
+    
+  }
+}
+
+
 
 
