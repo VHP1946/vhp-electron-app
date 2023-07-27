@@ -130,7 +130,6 @@ module.exports = class AppMart{
               ...this.vapihpack,
               ...pack
             }
-            console.log(p);
             this.vapi.SENDrequest({//to api
               pack:p,
               route:'STORE'
@@ -195,9 +194,6 @@ module.exports = class AppMart{
         //check if connected
         //if connected: reach out to api
         // if not: send to localmart
-
-
-
 
 
          

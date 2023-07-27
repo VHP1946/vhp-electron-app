@@ -40,10 +40,11 @@ module.exports = class AppViews{
      * Loads the 'main' control
      */
     main({dev=false,login=false,appclose=()=>{}}){
-        let goto = this.FINDpage(this.mainPage);
+        let goto = this.FINDpage('login/');//this.mainPage);
         if(goto){
             this.mainv = this.LAUNCHpage({
                 path:goto.path,
+                view:true,
                 options:this.PREPpage(goto.type)
             });
             this.mainv.on('close',appclose)
@@ -138,7 +139,7 @@ module.exports = class AppViews{
     }
     LAUNCHpage=({view=false,path='',options={}},eve)=>{
         let loader = null;
-        if(!view){loader = this.load;}
+        if(view){loader = this.load;}
         else{
             loader=this.swap;
             view=this.mainv

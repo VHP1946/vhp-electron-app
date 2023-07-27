@@ -36,6 +36,14 @@ module.exports = class AppUser {
         this.creds = require(this.userfile);
 
         console.log('USER ',this.creds);
+        this.uRoutes={
+            authUser:(eve,{uname='',pswrd=''})=>{
+                let auth=false;
+                if(this.AUTHappuser(uname,pswrd)){auth=true;}
+                eve.sender.send('authUser',auth);
+            },
+            getUser:(eve,data)=>{eve.sender.send('getUser',this.creds);}
+        }
     }
 
     /** User Authentication

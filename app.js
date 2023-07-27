@@ -67,7 +67,8 @@ module.exports = class AppManager {
         }else{eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}
       },
       ...routes,
-      ...this.fx.routes
+      ...this.fx.routes,
+      ...this.user.uRoutes
     });
 
     this.app.on('ready',(eve)=>{

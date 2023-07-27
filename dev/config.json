@@ -24,7 +24,7 @@
                 }
             },
             "VOGCH": {
-                "pswrd":"vogel123",
+                "pswrd":"",
                 "config":{
                     "group": "CONS",
                     "name": "Christian Vogel",

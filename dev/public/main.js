@@ -4,13 +4,10 @@ const $ = require('jquery'),
 var {ipcRenderer}=require('electron');
 
 
-let route = 'store';
+let route = 'authUser';
 ipcRenderer.send(route,{
-    store:'pricekey',
-    pack:{
-        method:'QUERY',
-        options:{query:{}}
-    }
+    uname:'VOGCH',
+    pswrd:''
 });
 ipcRenderer.on(route,(eve,data)=>{
     if(data){
