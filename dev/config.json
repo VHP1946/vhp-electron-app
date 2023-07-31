@@ -1,5 +1,5 @@
 {
-    "app":"BEEQ",
+    "app":"Reporting",
     "dev":{
         "on":true
     },
@@ -51,54 +51,21 @@
     "controls":{
         "stdHeight":1080,
         "stdWidth":750,
-        "root":"/controls/",
+        "url":true,
+        "root":"http://18.191.223.80/",
         "mainPage":"main",
         "devPage":"main",
         "pages":{
             "login/":"index.js",
             "settings/":{},
-            "main":{}
+            "main":"Reporting"
         }
     },
     "mart":{
-        "quotes":{
-            "vapihpack":{
-                "db":"Replacement",
-                "collect":"Quote350"
-            },
-            "data":{
-                "type":"backup",
-                "sync":false
-            },
-            "type":"sync",
-            "locstore":{
-                "file":"quotes.db",
-                "ensure":{
-                    "fieldName":"id",
-                    "unique":true
-                }
-            }
-        },
-        "pricekey":{
-            "vapihpack":{
-                "db":"Replacement",
-                "collect":"Pricing350"
-            },
-            "data":{
-                "type":"offline",
-                "sync":true
-            },
-            "locstore":{
-                "file":"pricekeys.db",
-                "ensure":{
-                    "fieldName":"version",
-                    "unique":true
-                }
-            }
-        }
     },
     "vapiconfig":{
         "core":{
+            "sync":false,
             "auth":{"user":"VOGCH","pswrd":"vogel123"},
             "client":true,
             "host":"http://18.191.223.80/",

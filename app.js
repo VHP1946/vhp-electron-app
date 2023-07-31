@@ -52,7 +52,7 @@ module.exports = class AppManager {
         root:this.fx.approot
       });
     }
-
+    console.log('this is new')
     this.controls = new AppViews(controls);
 
     this.routes = [];

@@ -191,32 +191,39 @@ module.exports = class AppFX{
      * @param {Object} data
      * @param {Boolean} open 
      */
-    jsonTOexcel(eve,{
+    jsonTOexcel=(eve,{
       drive='',
       epath=null,
       data=[],
+      sheetName='MAIN',
       open=false
-    }){
+    })=>{
       let retpak = {
         success:false,
         msg:'could not convert'
       }
-      try{
+      //try{
         if(this.computer[drive]){
           let wb = reader.utils.book_new();
 
-          for(let i=0;i<data.length;i++){
-            reader.utils.book_append_sheet(wb,reader.utils.json_to_sheet(data[i].data),data[i].shname);
-          }
+          
+          //for(let i=0;i<data.length;i++){
+            reader.utils.book_append_sheet(wb,reader.utils.json_to_sheet(data),sheetName);
+          //}
+          let epath2 = path.join(this.computer[drive],epath);
+
           reader.writeFile(wb,path.join(this.computer[drive],epath));
           retpak.msg = 'Check file for further success';
           if(open){
-            exec(epath.replace(/ /g,'^ '));
+            exec(`start "" "${epath2.replace(/\\/g,'\\\\')}"`,(err,stdout,stderr)=>{
+              if(err){retpak.msg=err;}
+              else if(stdout){retpak.success=true;retpak.msg=stdout;}
+              else if(stderr){retpak.msg=stderr;}
+            });
             retpak.msg = 'File is opening';
-          }
-          eve.sender.send('jsonTOexcel',retpak);
+          }else{eve.sender.send('jsonTOexcel',retpak);}
         }else{retpak.msg = 'No Drive';eve.sender.send('jsonTOexcel',retpak)}
-      }catch{eve.sender.send('jsonTOexcel',retpak)}
+      //}catch{eve.sender.send('jsonTOexcel',retpak)}
 
     }
 }
