@@ -52,7 +52,7 @@ module.exports = class AppManager {
         root:this.fx.approot
       });
     }
-
+    console.log('this is new')
     this.controls = new AppViews(controls);
 
     this.routes = [];
@@ -60,14 +60,15 @@ module.exports = class AppManager {
       store:(eve,data)=>{
         console.log('Request to mart',data);
         if(this.store[data.store]){
-          this.store[data.store].ROUTEmart(data.pack).then(answr=>{
+          this.store[data.store].ROUTEstore(data.pack).then(answr=>{
             console.log('End of Routes ',answr);
             eve.sender.send('store',answr);
           });
-        }else{eve.sender.send('store',{success:false,msg:'Store does exists!',result:[]})}
+        }else{eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}
       },
       ...routes,
-      ...this.fx.routes
+      ...this.fx.routes,
+      ...this.user.uRoutes
     });
 
     this.app.on('ready',(eve)=>{

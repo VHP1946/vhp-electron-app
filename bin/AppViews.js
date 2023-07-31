@@ -22,11 +22,12 @@ module.exports = class AppViews{
         stdwidth=1080,
         stdheight=750,
         root="",
+        url=false,
         mainPage="main",
         pages={}
     }){
+        this.url = url;
         this.root = root;
-        console.log(pages)
         this.mainPage = mainPage;
         this.pages=pages;
 
@@ -40,10 +41,11 @@ module.exports = class AppViews{
      * Loads the 'main' control
      */
     main({dev=false,login=false,appclose=()=>{}}){
-        let goto = this.FINDpage(this.mainPage);
+        let goto = this.FINDpage('main');//this.mainPage);
         if(goto){
             this.mainv = this.LAUNCHpage({
                 path:goto.path,
+                view:true,
                 options:this.PREPpage(goto.type)
             });
             this.mainv.on('close',appclose)
@@ -71,6 +73,11 @@ module.exports = class AppViews{
         options={}
     })=>{
         console.log('Request page -> ',page);
+        eve.sender.send('GOTO',this.pager({view:view,page:page,options:options}));
+        
+    }
+
+    pager=({view=false,page='',options})=>{
         let goto = this.FINDpage(page);
         console.log(goto);
         let spak = {
@@ -82,13 +89,12 @@ module.exports = class AppViews{
             let win = this.LAUNCHpage({
                 view:view,
                 path:goto.path,
-                options:options},eve);
+                options:options});
             //do something with window
             spak.success=true;
-            eve.sender.send('GOTO',spak);
-        }else{spak.err='Could Not Find Page';eve.sender.send('GOTO',spak)}
+        }else{spak.err='Could Not Find Page';}
+        return spak;
     }
-
     /**Find a page
      * Takes a request, decides its type, creates a path, and
      * checks if that path exists.
@@ -107,18 +113,26 @@ module.exports = class AppViews{
             path:'',
             type:''
         }
-        if(this.pages[request]){
-            if(request[request.length-1]==='/'){
-                page.path = path.join(this.root,request,'index.html');
-                page.type = 'react';
-            }//react app
-            else{
-                page.path = path.join(this.root,request + '.html');
-                page.type = 'html';
-            }//...html
-            if(fs.existsSync(page.path)){return page;}
-            else{return false;}
-        }else{return false;}
+        if(!this.url){
+            if(this.pages[request]){
+                if(request[request.length-1]==='/'){
+                    page.path = path.join(this.root,request,'index.html');
+                    page.type = 'react';
+                }//react app
+                else{
+                    page.path = path.join(this.root,request + '.html');
+                    page.type = 'html';
+                }//...html
+                if(fs.existsSync(page.path)){return page;}
+                else{return false;}
+            }else{return false;}
+        }else{
+            page.path = this.root+this.pages[request];
+            path.type = 'react';
+
+            //check url for valid path
+            return page;
+        }
     }
     PREPpage=(type="")=>{
         let options={};
@@ -130,15 +144,15 @@ module.exports = class AppViews{
                     symbolColor: '#fff',
                     height: 40
                 }
-                options.titlebar = 'hidden'
+                options.titlebar = 'show'
                 break;
             }
         }
         return options;
     }
-    LAUNCHpage=({view=false,path='',options={}},eve)=>{
+    LAUNCHpage=({view=false,path='',options={}})=>{
         let loader = null;
-        if(!view){loader = this.load;}
+        if(view){loader = this.load;}
         else{
             loader=this.swap;
             view=this.mainv
@@ -197,8 +211,13 @@ module.exports = class AppViews{
                 width:w<=0?500:w,
                 height:h<=0?500:h,
                 autoHideMenuBar:menubar,
-                titleBarStyle: titlebar,
+                titleBarStyle: 'hidden',//titlebar,
                 transparent:transparent,
+                titleBarOverlay:{
+                    color: '#062a49',
+                    symbolColor: '#fff',
+                    height: 40
+                }
             });
             if(w===0){nwin.maximize();}
             nwin.loadURL(fpath);
