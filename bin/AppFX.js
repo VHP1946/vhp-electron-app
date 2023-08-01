@@ -53,20 +53,22 @@ module.exports = class AppFX{
         drive='',
         fpath=''
     })=>{
-        let route = 'openFolder';
-        let ofresp = {
-          success:false,
-          msg:'Could Not Open Folder -> '+fpath
-        }
-        if(this.computer[drive]){
-          fpath = path.join(this.computer[drive],fpath);
-          exec(`start "" "${fpath.replace(/\\/g,'\\\\')}"`,(err,stdout,stderr)=>{
-              if(err){ofresp.msg=err;}
-              else if(stdout){ofresp.success=true;ofresp.msg=stdout;}
-              else if(stderr){ofresp.msg=stderr;}
-              eve.sender.send(route,ofresp);
-          });
-        }else{eve.sender.send(route,ofresp);}
+      return new Promise((resolve,reject)=>{
+          let route = 'openFolder';
+          let ofresp = {
+            success:false,
+            msg:'Could Not Open Folder -> '+fpath
+          }
+          if(this.computer[drive]){
+            fpath = path.join(this.computer[drive],fpath);
+            exec(`start "" "${fpath.replace(/\\/g,'\\\\')}"`,(err,stdout,stderr)=>{
+                if(err){ofresp.msg=err;}
+                else if(stdout){ofresp.success=true;ofresp.msg=stdout;}
+                else if(stderr){ofresp.msg=stderr;}
+                return resolve(ofresp);//eve.sender.send(route,ofresp);
+            });
+          }else{return resolve(ofresp);}//eve.sender.send(route,ofresp);}
+        });
     }
 
     /**Printer
@@ -93,40 +95,42 @@ module.exports = class AppFX{
         open = true
       }
     )=>{
-      let route = 'printer';
-      let presp = {
-        success:false,
-        msg:`Failed to write PDF to ${fpath}`
-      };
-      if(fpath){
-        try{
-          let fullpath = path.join(fpath,fname+'.pdf');
-          eve.sender.printToPDF({printBackground:true}).then(data => {
-            fs.writeFile(fullpath, data, (error) => {
-              if (!error){
-                if(open){
-                  exec(path.join(fullpath).replace(/ /g,'^ '),(err,stdout,stderr)=>{
-                    if(err){presp.msg=err;}
-                    else if(stdout){presp.success=true;presp.msg=stdout;}
-                    else if(stderr){presp.msg=stderr;}
-                    eve.sender.send(route,presp);
-                  });
+      return new Promise((resolve,reject)=>{
+        let route = 'printer';
+        let presp = {
+          success:false,
+          msg:`Failed to write PDF to ${fpath}`
+        };
+        if(fpath){
+          try{
+            let fullpath = path.join(fpath,fname+'.pdf');
+            eve.sender.printToPDF({printBackground:true}).then(data => {
+              fs.writeFile(fullpath, data, (error) => {
+                if (!error){
+                  if(open){
+                    exec(path.join(fullpath).replace(/ /g,'^ '),(err,stdout,stderr)=>{
+                      if(err){presp.msg=err;}
+                      else if(stdout){presp.success=true;presp.msg=stdout;}
+                      else if(stderr){presp.msg=stderr;}
+                      return resolve(presp);//eve.sender.send(route,presp);
+                    });
+                  }else{
+                    presp.success=true;
+                    presp.msg='completed';
+                    return resolve(presp);//eve.sender.send(route,presp);
+                  }
                 }else{
-                  presp.success=true;
-                  presp.msg='completed';
-                  eve.sender.send(route,presp);
+                  presp.msg += `: ${error}`;
+                  return resolve(presp);//eve.sender.send(route,presp);
                 }
-              }else{
-                presp.msg += `: ${error}`;
-                eve.sender.send(route,presp);
-              }
+              });
+            }).catch(error => {
+                presp.msg+=`: ${error}`
+                return resolve(presp);//eve.sender.send(route,presp);
             });
-          }).catch(error => {
-              presp.msg+=`: ${error}`
-              eve.sender.send(route,presp);
-          });
-      }catch{eve.sender.send(route,presp)} //File is open, bring file into view
-      }else{eve.sender.send(route,presp)}
+        }catch{return resolve(presp);}//eve.sender.send(route,presp)} //File is open, bring file into view
+        }else{return resolve(presp);}//eve.sender.send(route,presp)}
+      });
     }
 
     /**  Standard excel sheet to a json filter
@@ -148,39 +152,41 @@ module.exports = class AppFX{
       SHname='Sheet1',
       map=(m)=>{return m}
     })=>{
-      let retpak = {
-        success:false,
-        msg:'',
-        data:null
-      }
-      try{
-        if(this.cumputer[drive]){
-          epath= path.join(this.computer[drive],epath);
-          let book = reader.readFile(epath);
-          let sh = reader.utils.sheet_to_json(book.Sheets[SHname]);
-          let jdata = [];
-          for (let x=0;x<sh.length;x++){
-              jdata.push(map(sh[x]));
-          }
-          retpak.data = jdata;
-          retpak.msg = 'Data was converted';
-          retpak.success=true;
-          if(jpath){
-            jpath = path.join(this.computer[drive],jpath);
-            retpak.msg = 'Attempt to write';
-            retpak.data = undefined;
-            fs.writeFile(jpath,JSON.stringify(jdata),(err)=>{
-                if(err){
-                  retpak.success=false;
-                  retpak.msg = err;
-                }
-                else{retpak.msg =  `Excel file> ${epath} HAS uploaded to.. /t','JSON file> ${jpath}`}
-                eve.sender.send('excelTOjson',retpak);
-            });
-          }
-          eve.sender.send('excelTOjson',retpak);
-        }else{retpak.msg = ''}
-      }catch{eve.sender.send('excelTOjson',retpak);}
+      return new Promise((resolve,reject)=>{
+        let retpak = {
+          success:false,
+          msg:'',
+          data:null
+        }
+        try{
+          if(this.cumputer[drive]){
+            epath= path.join(this.computer[drive],epath);
+            let book = reader.readFile(epath);
+            let sh = reader.utils.sheet_to_json(book.Sheets[SHname]);
+            let jdata = [];
+            for (let x=0;x<sh.length;x++){
+                jdata.push(map(sh[x]));
+            }
+            retpak.data = jdata;
+            retpak.msg = 'Data was converted';
+            retpak.success=true;
+            if(jpath){
+              jpath = path.join(this.computer[drive],jpath);
+              retpak.msg = 'Attempt to write';
+              retpak.data = undefined;
+              fs.writeFile(jpath,JSON.stringify(jdata),(err)=>{
+                  if(err){
+                    retpak.success=false;
+                    retpak.msg = err;
+                  }
+                  else{retpak.msg =  `Excel file> ${epath} HAS uploaded to.. /t','JSON file> ${jpath}`}
+                  return resolve(retpak);//eve.sender.send('excelTOjson',retpak);
+              });
+            }
+            return resolve(retpak);//eve.sender.send('excelTOjson',retpak);
+          }else{retpak.msg = '';return resolve(retpak);}
+        }catch{return resolve(retpak);}//eve.sender.send('excelTOjson',retpak);}
+      });
 
     }
 
@@ -198,32 +204,37 @@ module.exports = class AppFX{
       sheetName='MAIN',
       open=false
     })=>{
-      let retpak = {
-        success:false,
-        msg:'could not convert'
-      }
-      //try{
-        if(this.computer[drive]){
-          let wb = reader.utils.book_new();
+      return new Promise((resolve,reject)=>{
+        let retpak = {
+          success:false,
+          msg:'could not convert'
+        }
+        //try{
+          if(this.computer[drive]){
+            let wb = reader.utils.book_new();
 
-          
-          //for(let i=0;i<data.length;i++){
-            reader.utils.book_append_sheet(wb,reader.utils.json_to_sheet(data),sheetName);
-          //}
-          let epath2 = path.join(this.computer[drive],epath);
+            
+            //for(let i=0;i<data.length;i++){
+              reader.utils.book_append_sheet(wb,reader.utils.json_to_sheet(data),sheetName);
+            //}
+            let epath2 = path.join(this.computer[drive],epath);
 
-          reader.writeFile(wb,path.join(this.computer[drive],epath));
-          retpak.msg = 'Check file for further success';
-          if(open){
-            exec(`start "" "${epath2.replace(/\\/g,'\\\\')}"`,(err,stdout,stderr)=>{
-              if(err){retpak.msg=err;}
-              else if(stdout){retpak.success=true;retpak.msg=stdout;}
-              else if(stderr){retpak.msg=stderr;}
-            });
-            retpak.msg = 'File is opening';
-          }else{eve.sender.send('jsonTOexcel',retpak);}
-        }else{retpak.msg = 'No Drive';eve.sender.send('jsonTOexcel',retpak)}
-      //}catch{eve.sender.send('jsonTOexcel',retpak)}
+            reader.writeFile(wb,path.join(this.computer[drive],epath));
+            retpak.msg = 'Check file for further success';
+            if(open){
+              exec(`start "" "${epath2.replace(/\\/g,'\\\\')}"`,(err,stdout,stderr)=>{
+                if(err){retpak.msg=err;}
+                else if(stdout){retpak.success=true;retpak.msg=stdout;}
+                else if(stderr){retpak.msg=stderr;}
+              });
+              retpak.msg = 'File is opening';
+            }else{return resolve(retpak);}//eve.sender.send('jsonTOexcel',retpak);}
+          }else{
+            retpak.msg = 'No Drive';
+            return resolve(retpak);//eve.sender.send('jsonTOexcel',retpak)}
+          }
+        //}catch{eve.sender.send('jsonTOexcel',retpak)}
+      });
 
     }
 }

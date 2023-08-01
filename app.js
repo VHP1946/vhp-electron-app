@@ -44,6 +44,7 @@ module.exports = class AppManager {
       ...access,
       userfile:path.join(this.fx.lsroot,'userset.json')
     });
+
     //loop though mart, setup marts *NOT STARTED*
     this.store = {};
     for(let m in mart){
@@ -58,13 +59,15 @@ module.exports = class AppManager {
     this.routes = [];
     this.setupRoutes({
       store:(eve,data)=>{
-        console.log('Request to mart',data);
-        if(this.store[data.store]){
-          this.store[data.store].ROUTEstore(data.pack,data.options).then(answr=>{
-            // /console.log('End of Routes ',answr);
-            eve.sender.send('store',answr);
-          });
-        }else{eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}
+        return new Promise((resolve,reject)=>{
+          console.log('Request to mart',data);
+          if(this.store[data.store]){
+            this.store[data.store].ROUTEstore(data.pack,data.options).then(answr=>{
+              // /console.log('End of Routes ',answr);
+              return resolve(answr);//eve.sender.send('store',answr);
+            });
+          }else{return resolve({success:false,msg:'Store doesnt exists!',result:[]});}//eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}
+        });
       },
       ...routes,
       ...this.fx.routes,

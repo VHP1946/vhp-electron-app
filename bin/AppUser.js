@@ -38,11 +38,13 @@ module.exports = class AppUser {
         console.log('USER ',this.creds);
         this.uRoutes={
             authUser:(eve,{uname='',pswrd=''})=>{
-                let auth=false;
-                if(this.AUTHappuser(uname,pswrd)){auth=true;}
-                eve.sender.send('authUser',auth);
+                return new Promise((resolve,reject)=>{
+                    let auth=false;
+                    if(this.AUTHappuser(uname,pswrd)){auth=true;}
+                    return resolve(auth);//eve.sender.send('authUser',auth);
+                });
             },
-            getUser:(eve,data)=>{eve.sender.send('getUser',this.creds);}
+            getUser:(eve,data)=>{return new Promise((resolve,reject)=>{return resolve(this.creds);});}//eve.sender.send('getUser',this.creds);}
         }
     }
 

@@ -3,23 +3,10 @@ const $ = require('jquery'),
 
 var {ipcRenderer}=require('electron');
 
-
-let route = 'store';
-//RRQ-1689782472381
-ipcRenderer.send(route,{
+ipcRenderer.invoke('store',{
     store:'quotes',
     pack:{
         method:'QUERY',
-        options:{query:{id:'RRQ-1689782472381'}}
-    },
-    options:{
-        //refresh:true
+        options:{query:{estimator:'MURRY'}}
     }
-});
-ipcRenderer.on(route,(eve,data)=>{
-    let doc = data.result[0]
-    if(data.success){
-        console.log(doc);
-        doc.cat='test';
-    }
-})
+}).then(result=>{console.log(result)})

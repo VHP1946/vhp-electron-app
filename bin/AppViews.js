@@ -72,8 +72,10 @@ module.exports = class AppViews{
         view=false, //
         options={}
     })=>{
-        console.log('Request page -> ',page);
-        eve.sender.send('GOTO',this.pager({view:view,page:page,options:options}));
+        return new Promise((resolve,reject)=>{
+            console.log('Request page -> ',page);
+            return resolve(this.pager({view:view,page:page,options:options}));//eve.sender.send('GOTO',this.pager({view:view,page:page,options:options}));
+        });
         
     }
 
