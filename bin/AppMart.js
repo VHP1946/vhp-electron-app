@@ -151,7 +151,7 @@ module.exports = class AppMart{
                       console.log('Adjusted non queries locally ',locAdjust);
                     });
                   }
-                  if(answr.success && this.data.type==='backup' && options.refresh && pack.method=='QUERY'){
+                  if(answr.success && this.data.type==='backup' && options.refresh && pack.method=='QUERY'){//refresh data
                     console.log('REFRESH request ');
                     this.local.REMOVEdoc({
                       query:{}
@@ -216,100 +216,6 @@ module.exports = class AppMart{
             return resolve(answr);
           }).catch(err=>{return resolve({success:false,msg:err,result:null})})
         }else{return resolve({success:false,msg:'not a request',result:null})}
-      });
-    }
-
-
-
-    UPDATEdoc=({query={},update={},options={}})=>{
-      return new Promise((resolve,reject)=>{
-        //check if connected
-        //if connected: reach out to api
-        // if not: send to localmart
-
-
-         
-        /*
-        this.local.UPDATEdb(query,update,options).then(({err,numrep})=>{
-          console.log('--UPDATE TOP--')
-          console.log('AFTER UPDATE');
-          console.log('ERROR > ',err);
-          console.log('result >',numrep);
-          if(numrep&&numrep>0){
-            this.QUERYlocal(query).then(docs=>{
-              if(docs){
-                this.SENDdocs({
-                  method:'update',
-                  options:{
-                    query:query,
-                    update:update,
-                    options:options
-                  }
-                },docs).then(({connected,vapi,changelog})=>{
-                  console.log(`--------------------\nSEND Report => connected:${connected} vapi:${vapi} changelog:${changelog}\n--------------------`)
-                });
-              }else{return resolve({numrep:numrep,err:'Document(s) where only updated locally. They could not be added to change log. REUPDATE to fix'})}
-              return resolve({numrep:numrep,err:null})
-            });
-          }else{return resolve({numrep:numrep,err:err})}
-        })
-        */
-      })
-    }
-  
-    INSERTdoc=({docs=[]})=>{
-      return new Promise((resolve,reject)=>{
-        if(docs){
-          this.local.INSERTdoc(docs).then(({err,result,success})=>{
-            console.log('Local Insert >', doc);
-            if(doc){
-              this.SENDdocs({
-                method:'insert',
-                options:{
-                  docs:docs
-                }
-              },docs).then(({connected,vapi,changelog})=>{
-                console.log(`--------------------\nSEND Report => connected:${connected} vapi:${vapi} changelog:${changelog}\n--------------------`)
-              });
-              console.log('LEAVING INSERT')
-              return resolve({doc:doc,err:null});
-            }
-            else{return resolve({doc:null,err:err})}
-          })
-        }
-      });
-    }
-  
-    REMOVEdoc=({query={},multi=false})=>{
-      return new Promise((resolve,reject)=>{
-        this.local.QUERYdb(query).then(docs=>{
-          this.local.REMOVEdoc(query,{multi:multi}).then(({err,num})=>{
-            if(!err){
-              this.SENDdocs({
-                method:'remove',
-                options:{
-                  query:query,
-                  multi:multi
-                }
-              },docs).then(({connected,vapi,changelog})=>{
-                console.log(`--------------------\nSEND Report => connected:${connected} vapi:${vapi} changelog:${changelog}\n--------------------`)
-              });
-              return resolve(true);
-            }else{return resolve(false);}
-          });
-        });
-      });
-    }
-
-    REFRESHlocal=({pack={}})=>{
-      return new Promise((resolve,reject)=>{
-        if(this.vapi.connected){
-          this.vapi.Request(pack).then(result=>{
-            if(result){
-              this.local(i)
-            }else{return resolve({success:false,msg:"cannot find"})}
-          });
-        }else{return resolve({success:false,msg:"not connected"})}
       });
     }
 

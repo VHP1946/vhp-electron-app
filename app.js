@@ -42,7 +42,7 @@ module.exports = class AppManager {
 
     this.user = new AppUser({
       ...access,
-      userfile:path.join(this.fx.lsroot,'userset.json')
+      userfile:path.join(this.fx.approot,'userset.json')
     });
 
     //loop though mart, setup marts *NOT STARTED*

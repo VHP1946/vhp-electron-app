@@ -29,12 +29,18 @@ module.exports = class AppUser {
         userfile=''
     }){
         this.userfile = userfile;
-        //ensure file is created
-        //auth data / user setup
         this.userslist = users; //list of user credentials for application **authlist
         this.refreshed = false; //has just changed=(true) other module would acknowledge and turn it (false)
         this.saved = true;
-        this.creds = require(this.userfile);
+        try{this.creds = require(this.userfile);}
+        catch{
+            this.creds={
+                uname:'',
+                pswrd:'',
+                config:{}
+            }
+            this.RWappuser();
+        }
 
         console.log('USER ',this.creds);
         this.uRoutes={
@@ -95,6 +101,7 @@ module.exports = class AppUser {
             pswrd:'',
             config:{}
         }
+        this.RWappuser();//reset the saving 
         return this.creds;
     }
 }
