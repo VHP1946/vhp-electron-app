@@ -116,7 +116,7 @@ module.exports = class AppMart{
      * @param {*} pack 
      * @returns 
      */
-    ROUTEstore=(pack={},options={})=>{
+    ROUTEstore(pack={},options={}){
       return new Promise((resolve,reject)=>{
         if(this.data.type==='offline'){
           if(this.local){//ensure local is setup
@@ -126,6 +126,7 @@ module.exports = class AppMart{
           }else{return resolve({success:false,msg:'storage not setup'})}
         }else{
           if(this.vapi.connected){
+            console.log('Connected',vapi.connected);
             let p = {//prep pack
               ...this.vapihpack,
               ...pack
@@ -204,9 +205,9 @@ module.exports = class AppMart{
         if(lmart){
           lmart.then(answr=>{
             console.log('LOCAL MART > ',answr);
-            if(this.type === 'backup' && !this.vapi.connected){
+            if(this.data.type === 'backup' && !this.vapi.connected){
               if(logneed){console.log('save to change log');
-                this.changes.LOGchange(pack.method.toUpperCase(),pack,doc).then(logres=>{
+                this.changes.LOGchange(pack.method.toUpperCase(),pack.options.query,pack.options.update?pack.options.update:undefined).then(logres=>{
                   console.log('Log Change After Local Update >',logres);
                 });
               }

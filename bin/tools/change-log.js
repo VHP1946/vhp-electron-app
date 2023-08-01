@@ -16,6 +16,7 @@ module.exports = class MartChangeLog{
         root="",
         file="",
     }){
+
         try{fs.mkdirSync(path.join(root,'/changelog'));}catch{}
         this.log = new NEDBconnect(path.join(root,'changelog/',file),localStore.ensure)
         //ensure changelog file
@@ -39,74 +40,78 @@ module.exports = class MartChangeLog{
      * @param {*} pack 
      */
 
-    LOGchange(type=null,id=null,doc={}){
+    LOGchange(type=null,{id=null},chdoc={}){
         return new Promise((resolve,reject)=>{
+            console.log('Attempt to log change',chdoc);
             if(id&&type){
-            console.log("CHANGE ID >",id);
-            let types={
-                INSERT:true,
-                REMOVE:true,
-                UPDATE:true,
-            }
-            this.log.QUERYdb({id:id}).then((docs)=>{
-                console.log('--------------------------------')
-                console.log(`LOOKING to ${type} id ${id}`);
-                console.log('CHANGE LOG >',docs);
-                let insert=true;
-                if(types[type]){//check if type
-                if(docs){
-                    if(docs.length!==0){
-                    if(type==='REMOVE'){
-                        //if remove and value of type found in query is 'insert', we
-                        // could remove the item all together.
-                        insert=false;
-                        if(docs[0].type==='INSERT'){
-                        console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
-                        console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
-                        this.log.REMOVEdoc({id:id}).then(({num,err})=>{
-                            console.log(`CHANGE REMOVED id ${id} > ${num}`);
-                            console.log(`ERROR: ${err}`);
-                            if(err){return resolve(false)}
-                            return resolve(true);
-                        });
-                        }else{
-                        console.log('CHANGE LOG REMOVE ITEM')
-                        docs[0].type=type;
-                        this.log.UPDATEdoc({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
-                            console.log(`CHANGE UPDATE> ${type} > ${numrep}`);
-                            console.log(`ERROR: ${err}`);
-                            if(err){return resolve(false)}
-                            return resolve(true)
-                        })
-                        }
-                    }else if(type==='UPDATE'){
-                        insert=false
-                        console.log('CHANGE LOG UPDATE ITEM')
-                        docs[0].doc=doc;
+                console.log("CHANGE ID >",id);
+                let types={
+                    INSERT:true,
+                    REMOVE:true,
+                    UPDATE:true,
+                }
+                this.log.QUERYdb({id:id}).then((docs)=>{
+                    console.log('--------------------------------')
+                    console.log(`LOOKING to ${type} id ${id}`);
+                    console.log('CHANGE LOG >',docs);
+                    let insert=true;
+                    if(types[type]){//check if type
+                        if(docs.result && docs.result.length==1){
+                            console.log('ChECKING STRING')
+                            if(type==='REMOVE'){
+                                //if remove and value of type found in query is 'insert', we
+                                // could remove the item all together.
+                                insert=false;
+                                if(docs.result[0].type==='INSERT'){
+                                console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
+                                console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
+                                this.log.REMOVEdoc({
+                                    query:{id:id}
+                                }).then((reres)=>{
+                                    console.log(`CHANGE REMOVED id ${id} > ${reres.result}`);
+                                    return resolve(reres.success);
+                                });
+                                }else{
+                                console.log('CHANGE LOG REMOVE ITEM')
+                                docs.result[0].type=type;
+                                this.log.UPDATEdoc({
+                                    query:{id:id},
+                                    update:{$set:docs.result[0]}
+                                }).then((ures)=>{
+                                    console.log(`CHANGE UPDATE> ${type} > ${ures.result}`);
+                                    return resolve(ures.success);
+                                })
+                                }
+                            }else if(type==='UPDATE'){
+                                insert=false
+                                console.log('CHANGE LOG UPDATE ITEM')
+                                docs.result[0].doc=chdoc;
 
-                        this.log.UPDATEdoc({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
-                        console.log(`CHANGE UPDATE > ${type} > ${numrep}`);
-                        console.log(`ERROR: ${err}`);
-                        if(err){console.log(err);return resolve(false)}
-                        return resolve(true);
-                        });
-                    }
-                    }
-                }
-                if(insert){
-                    this.log.INSERTdoc({
-                        type:type,
-                        id:id,
-                        doc:doc
-                    }).then(({err,doc})=>{
-                        console.log(`CHANGE INSERT> ${type} > ${doc}`);
-                        console.log(`ERROR: ${err}`);
-                        if(err){return resolve(false)}
-                        return resolve(true);
-                    });
-                }
-                }else{console.log('NO MATCHING TYPE');return resolve(false);}
-            });
+                                this.log.UPDATEdoc({
+                                    query:{id:id},
+                                    update:{$set:docs.result[0]}
+                                }).then((ures)=>{
+                                    console.log(`CHANGE UPDATE > ${type} > ${ures.result}`);
+                                    return resolve(ures.success);
+                                });
+                            }
+                        }
+                        if(insert){
+                            console.log()
+                            this.log.INSERTdoc({
+                                docs:{
+                                    type:type,
+                                    id:id,
+                                    doc:chdoc
+                                }
+                            }).then((result)=>{
+                                console.log(`CHANGE INSERT> ${type} > ${result.result}`)
+                                if(result.success){return resolve(false)}
+                                return resolve(true);
+                            });
+                        }
+                    }else{console.log('NO MATCHING TYPE');return resolve(false);}
+                });
             }else{return resolve(false)}
         });
     } 

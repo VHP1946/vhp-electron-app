@@ -32,7 +32,7 @@ class NEDBconnect{
 
   INSERTdoc=({docs})=>{
     return new Promise((resolve,reject)=>{
-      console.log(docs);
+      console.log('insert ',docs);
       if(docs){
         this.docs.insert(docs,(err,doc)=>{
           console.log(doc);
