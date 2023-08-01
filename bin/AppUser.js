@@ -29,6 +29,7 @@ module.exports = class AppUser {
         userfile=''
     }){
         this.userfile = userfile;
+        //ensure file is created
         //auth data / user setup
         this.userslist = users; //list of user credentials for application **authlist
         this.refreshed = false; //has just changed=(true) other module would acknowledge and turn it (false)
@@ -44,7 +45,8 @@ module.exports = class AppUser {
                     return resolve(auth);//eve.sender.send('authUser',auth);
                 });
             },
-            getUser:(eve,data)=>{return new Promise((resolve,reject)=>{return resolve(this.creds);});}//eve.sender.send('getUser',this.creds);}
+            getUser:(eve,data)=>{return new Promise((resolve,reject)=>{return resolve(this.creds);});},//eve.sender.send('getUser',this.creds);}
+            logOut:(eve,data)=>{return new Promise((resolve,reject)=>{return resolve(this.RESETuser());});}
         }
     }
 
@@ -85,5 +87,14 @@ module.exports = class AppUser {
                 return this.saved;
             }
         }
+    }
+
+    RESETuser=()=>{
+        this.creds={
+            uname:'',
+            pswrd:'',
+            config:{}
+        }
+        return this.creds;
     }
 }

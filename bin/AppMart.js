@@ -121,11 +121,7 @@ module.exports = class AppMart{
         if(this.data.type==='offline'){
           if(this.local){//ensure local is setup
             if(pack.method.toUpperCase()==='QUERY'){
-              this.local.QUERYdb(pack.options).then(({success,err,result})=>{
-                if(err){return resolve(null)}//change fail method
-                if(result){return resolve(result)}
-                return resolve([]);
-              });
+              return resolve(this.local.QUERYdb(pack.options));
             }else{return resolve({success:false,msg:'this is read only'})}
           }else{return resolve({success:false,msg:'storage not setup'})}
         }else{
