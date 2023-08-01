@@ -161,7 +161,7 @@ module.exports = class AppMart{
                       console.log('REFRESH remove Result ',clearRes);
                       if(clearRes.success){
                         this.local.docs.persistence.compactDatafile();
-                        this.local.INSERTdb({
+                        this.local.INSERTdoc({
                           docs:answr.result
                         }).then(ianswr=>{
                           console.log("REFRESH INSERT ",ianswr);
@@ -262,7 +262,7 @@ module.exports = class AppMart{
     INSERTdoc=({docs=[]})=>{
       return new Promise((resolve,reject)=>{
         if(docs){
-          this.local.INSERTdb(docs).then(({err,result,success})=>{
+          this.local.INSERTdoc(docs).then(({err,result,success})=>{
             console.log('Local Insert >', doc);
             if(doc){
               this.SENDdocs({
@@ -337,7 +337,7 @@ module.exports = class AppMart{
               }).then(({err,result,success})=>{
                 if(err){return resolve({success:false,msg:err})}
                 else{
-                  this.local.INSERTdb({docs:list.result}).then(({err,success,result})=>{
+                  this.local.INSERTdoc({docs:list.result}).then(({err,success,result})=>{
                     if(err){return resolve({success:false,msg:err})}
                     else{return resolve({success:true,msg:this.file+' has synced'})}
                   });

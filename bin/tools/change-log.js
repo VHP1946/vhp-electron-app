@@ -48,7 +48,7 @@ module.exports = class MartChangeLog{
                 REMOVE:true,
                 UPDATE:true,
             }
-            this.QUERYchanges({id:id}).then((docs)=>{
+            this.log.QUERYdb({id:id}).then((docs)=>{
                 console.log('--------------------------------')
                 console.log(`LOOKING to ${type} id ${id}`);
                 console.log('CHANGE LOG >',docs);
@@ -63,7 +63,7 @@ module.exports = class MartChangeLog{
                         if(docs[0].type==='INSERT'){
                         console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
                         console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
-                        this.changes.REMOVEdoc({id:id}).then(({num,err})=>{
+                        this.log.REMOVEdoc({id:id}).then(({num,err})=>{
                             console.log(`CHANGE REMOVED id ${id} > ${num}`);
                             console.log(`ERROR: ${err}`);
                             if(err){return resolve(false)}
@@ -72,7 +72,7 @@ module.exports = class MartChangeLog{
                         }else{
                         console.log('CHANGE LOG REMOVE ITEM')
                         docs[0].type=type;
-                        this.changes.UPDATEdb({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
+                        this.log.UPDATEdoc({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
                             console.log(`CHANGE UPDATE> ${type} > ${numrep}`);
                             console.log(`ERROR: ${err}`);
                             if(err){return resolve(false)}
@@ -84,7 +84,7 @@ module.exports = class MartChangeLog{
                         console.log('CHANGE LOG UPDATE ITEM')
                         docs[0].doc=doc;
 
-                        this.changes.UPDATEdb({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
+                        this.log.UPDATEdoc({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
                         console.log(`CHANGE UPDATE > ${type} > ${numrep}`);
                         console.log(`ERROR: ${err}`);
                         if(err){console.log(err);return resolve(false)}
@@ -94,7 +94,7 @@ module.exports = class MartChangeLog{
                     }
                 }
                 if(insert){
-                    this.changes.INSERTdb({
+                    this.log.INSERTdoc({
                         type:type,
                         id:id,
                         doc:doc

@@ -21,7 +21,7 @@ class NEDBconnect{
     });
   }
 
-  UPDATEdb=({query={},update={},options={}})=>{
+  UPDATEdoc=({query={},update={},options={}})=>{
     return new Promise((resolve,reject)=>{
       this.docs.update(query,update,options,(err,numrep)=>{
         if(numrep>0){resolve({success:true,result:numrep,msg:null})}
@@ -30,7 +30,7 @@ class NEDBconnect{
     });
   }
 
-  INSERTdb=({docs})=>{
+  INSERTdoc=({docs})=>{
     return new Promise((resolve,reject)=>{
       console.log(docs);
       if(docs){
