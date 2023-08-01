@@ -97,6 +97,7 @@ module.exports = class AppMart{
         if(data.type=='backup'){
           this.changes=new MartChangeLog({
             vapi:this.vapi,
+            vapipack:this.vapihpack,
             locstore:locstore,
             root:this.root,
             file:this.file
@@ -318,30 +319,38 @@ module.exports = class AppMart{
     SYNCdata=()=>{
       return new Promise((resolve,reject)=>{
         if(this.vapi.connected){
-          this.vapi.SENDrequest({
-            pack:{
-              ...this.vapihpack,
-              method:'QUERY',
-              options:{query:{}}
-            },
-            route:'STORE'
-          }).then(list=>{
-            if(list.success){
-              console.log('SYNC list ',list.result);
-              this.local.REMOVEdoc({
-                query:{},
-                multi:true
-              }).then(({err,result,success})=>{
-                if(err){return resolve({success:false,msg:err})}
-                else{
-                  this.local.INSERTdoc({docs:list.result}).then(({err,success,result})=>{
-                    if(err){return resolve({success:false,msg:err})}
-                    else{return resolve({success:true,msg:this.file+' has synced'})}
-                  });
-                }
-              })
-            }else{return resolve({success:false,msg:'could not reach data'})}
-          })
+          //attempt to square changes
+          if(this.data.type==='backup'){
+            this.changes.syncChanges().then(answr=>{
+              console.log('DONE with Changes ',answr)
+              return resolve(answr);
+            })
+          }else{
+            this.vapi.SENDrequest({
+              pack:{
+                ...this.vapihpack,
+                method:'QUERY',
+                options:{query:{}}
+              },
+              route:'STORE'
+            }).then(list=>{
+              if(list.success){
+                console.log('SYNC list ',list.result);
+                this.local.REMOVEdoc({
+                  query:{},
+                  multi:true
+                }).then(({err,result,success})=>{
+                  if(err){return resolve({success:false,msg:err})}
+                  else{
+                    this.local.INSERTdoc({docs:list.result}).then(({err,success,result})=>{
+                      if(err){return resolve({success:false,msg:err})}
+                      else{return resolve({success:true,msg:this.file+' has synced'})}
+                    });
+                  }
+                })
+              }else{return resolve({success:false,msg:'could not reach data'})}
+            })
+          }
         }else{return resolve({success:false,msg:'not connected'})}
       });
     }

@@ -86,7 +86,6 @@ module.exports = class MartChangeLog{
                                 insert=false
                                 console.log('CHANGE LOG UPDATE ITEM')
                                 docs.result[0].doc=chdoc;
-
                                 this.log.UPDATEdoc({
                                     query:{id:id},
                                     update:{$set:docs.result[0]}
@@ -154,6 +153,115 @@ module.exports = class MartChangeLog{
     }
 
 
+    syncChanges=()=>{
+        return new Promise((resolve,reject)=>{
+            let syncstat={
+                INSERT:{
+                    try:0,
+                    success:0,
+                    failed:0,
+                    left:[],
+                    done:[]
+                },
+                REMOVE:{
+                    try:0,
+                    success:0,
+                    failed:0,
+                    left:[],
+                    done:[]
+                },
+                UPDATE:{
+                    try:0,
+                    success:0,
+                    failed:0,
+                    left:[],
+                    done:[]
+                }
+            }
+            let ran = false;
+            let skipper = 0;
+            if(this.vapi.connected){
+                ran=true;
+                this.log.QUERYdb({}).then(chres=>{
+                    console.log('List to Sync',chres)
+                    if(chres.success){
+                        let list = chres.result;
+                        if(list&&list.length!==0){
+                        console.log('List will sync');
+                        for(let x=0,l=list.length;x<l;x++){
+                            try{syncstat[list[x].type].try++;}catch{}
+                            skipper=skipper+2000;
+                            //setTimeout(()=>{
+                                let runner = null;
+                                console.log('RUNNER >',x,'\n>',list[x].type)
+                                switch(list[x].type){
+                                case 'INSERT':{
+                                    //syncstat.update.try++;
+                                    runner=this.vapi.SENDrequest({
+                                        pack:{
+                                            ...this.vapihpack,
+                                            method:list[x].type,
+                                            options:{
+                                                docs:list[x].doc
+                                            }
+                                        },
+                                        route:'STORE'
+                                    });
+                                    break;
+                                }
+                                case 'UPDATE':{
+                                    //syncstat.update.try++;
+                                    runner=this.vapi.SENDrequest({
+                                        pack:{
+                                            ...this.vapihpack,
+                                            method:list[x].type,
+                                            options:{
+                                                query:{id:list[x].id},
+                                                update:list[x].doc
+                                            }
+                                        },
+                                        route:'STORE'
+                                    });
+                                    break;
+                                }
+                                case 'REMOVE':{
+                                    //syncstat.remove.try++;
+                                    runner = this.vapi.SENDrequest({
+                                        pack:{
+                                            ...this.vapihpack,
+                                            method:list[x].type,
+                                            options:{
+                                                query:{id:list[x].id},
+                                                multi:false
+                                            }
+                                        },
+                                        route:'STORE'
+                                    });
+                                    break;
+                                }
+                                }
+                                if(runner){
+                                runner.then(answr=>{
+                                    console.log('RECIEVE > ',x,'\n>',list[x],'\n> ',answr)
+                                    if(answr.success){
+                                        syncstat[list[x].type].failed++;
+                                        syncstat[list[x].type].left.push(list[x])
+                                    }else{
+                                        syncstat[list[x].type].success++;
+                                        syncstat[list[x].type].done.push(list[x]._id);
+                                    }
+                                    if(this.CHECKsyncchanges(syncstat)){return resolve({ran:ran,stats:syncstat})}
+                                    else{console.log('NOT DONE SYNCING >', x)}
+                                });
+                                }
+                            //},50+skipper)
+                            }
+                        }else{return resolve({ran:ran,stats:syncstat})}
+                    }else{return resolve({ran:false,stats:syncstat})}
+                });
+            }else{return resolve({ran:ran,stats:syncstat})}
+        })
+    }
 
 
 
@@ -371,8 +479,8 @@ module.exports = class MartChangeLog{
         console.log('List to Clean >',clean);
         
         for(let x=0,l=clean.length;x<l;x++){
-            this.changes.REMOVEdoc({_id:clean[x]},true).then(result=>{//clean log
-            this.changes.docs.persistence.compactDatafile()
+            this.log.REMOVEdoc({_id:clean[x]},true).then(result=>{//clean log
+            this.log.docs.persistence.compactDatafile()
             console.log('REPORT RESULT >',result);
             })
         }

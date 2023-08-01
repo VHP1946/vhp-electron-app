@@ -68,8 +68,8 @@
                 "collect":"Quote350"
             },
             "data":{
-                "type":"backup",
-                "sync":false
+                "type":"offline",
+                "sync":true
             },
             "locstore":{
                 "file":"quotes.db",
