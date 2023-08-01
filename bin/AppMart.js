@@ -2,8 +2,8 @@
 const path = require('path');
 const fs = require('fs');
 
-
 const {NEDBconnect} = require('./tools/nedb-connector.js');
+const MartChangeLog=require('./tools/change-log.js');
 const {Core} = require("vhp-api");
 
 
@@ -11,7 +11,7 @@ let vapi=new Core({
       sync:false,
       auth:{user:'VOGCH',pswrd:'vogel123'},
       client:true,
-      host:"http://localhost:8080/",//"http://18.191.223.80/",//
+      host:"http://18.191.223.80/",//"http://localhost:8080/",//
       dev:{
           https:false,
           comments:false
@@ -63,7 +63,8 @@ module.exports = class AppMart{
       locstore={
         file:'',
         ensure:null
-      }
+      },
+      connection={}
     }){
       //ensure local mart root is created
         this.root = path.join(root,'mart'); //root to app folder mart
@@ -82,9 +83,8 @@ module.exports = class AppMart{
         //ensure local file existss
         this.file = locstore.file;  
         
-        this.vapi=vapi;//share connection to api
+        this.vapi= vapi;//share connection to api
         this.vapihpack = vapihpack;//store information for database
-
 
         this.data = data;
 
@@ -95,9 +95,13 @@ module.exports = class AppMart{
           this.local=new NEDBconnect(path.join(this.root,this.file),locstore.ensure);//connect to/create a data file
         }
         if(data.type=='backup'){
-          this.changes=new NEDBconnect(path.join(this.root,'/changeslogs/',this.file),locstore.ensure);//connect/create a changelog file for the above
+          this.changes=new MartChangeLog({
+            vapi:this.vapi,
+            locstore:locstore,
+            root:this.root,
+            file:this.file
+          });//NEDBconnect(path.join(this.root,'/changeslogs/',this.file),locstore.ensure);//connect/create a changelog file for the above
         }
-
         if(data.sync){
           this.SYNCdata().then(result=>{console.log('Sync ',result)});
         }//sync the requested local data with the api
@@ -112,7 +116,7 @@ module.exports = class AppMart{
      * @param {*} pack 
      * @returns 
      */
-    ROUTEstore=(pack={})=>{
+    ROUTEstore=(pack={},options={})=>{
       return new Promise((resolve,reject)=>{
         if(this.data.type==='offline'){
           if(this.local){//ensure local is setup
@@ -130,65 +134,95 @@ module.exports = class AppMart{
               ...this.vapihpack,
               ...pack
             }
-            this.vapi.SENDrequest({//to api
-              pack:p,
-              route:'STORE'
-            }).then(answr=>{
-              return resolve(answr);//backup if need
-            })
-          }else{return resolve(this.ROUTEmart(pack));}
+
+            let ready = null;
+
+            if(this.data.type==='backup'){
+              ready = this.changes.staleChanges(); //check/clean stale changes
+            }else{ready = new Promise((resolve,reject)=>{resolve(true);})}
+
+            ready.then(state=>{
+              if(state){
+                this.vapi.SENDrequest({//to api
+                  pack:p,
+                  route:'STORE'
+                }).then(answr=>{
+                  console.log(options,pack,this.type);
+                  if(answr.success && pack.method!='QUERY'){
+                    this.ROUTElocal(pack).then(locAdjust=>{
+                      console.log('Adjusted non queries locally ',locAdjust);
+                    });
+                  }
+                  if(answr.success && this.data.type==='backup' && options.refresh && pack.method=='QUERY'){
+                    console.log('REFRESH request ');
+                    this.local.REMOVEdoc({
+                      query:{}
+                    }).then(clearRes=>{
+                      console.log('REFRESH remove Result ',clearRes);
+                      if(clearRes.success){
+                        this.local.docs.persistence.compactDatafile();
+                        this.local.INSERTdb({
+                          docs:answr.result
+                        }).then(ianswr=>{
+                          console.log("REFRESH INSERT ",ianswr);
+                        });
+                      }else{
+                        console.log('Could not clear list');
+                      }
+                    })
+                  }
+                  if(!answr.success){
+                    return resolve(this.ROUTElocal(pack));
+                  }else{return resolve(answr)}
+                })
+              }else{return resolve({success:false,msg:'Item had a remove change attached to it',result:null})}
+            });
+          }else{return resolve(this.ROUTElocal(pack));}
         }
       });
     }
 
-    ROUTEmart=(pack={})=>{
+    ROUTElocal=(pack={})=>{
       return new Promise((resolve,reject)=>{
         let lmart = null;
+        let logneed=true;
+        let doc;
         switch(pack.method.toUpperCase()){
           case 'QUERY':{
             lmart = this.local.QUERYdb(pack.options);
+            logneed=false;//queries don't need to be logged
             break;
           }
           case 'REMOVE':{
-            lmart = this.REMOVEdoc(pack.options);
+            lmart = this.local.REMOVEdoc(pack.options);
             break;
           }
           case 'INSERT':{
-            lmart = this.INSERTdoc(pack.options);
+            lmart = this.local.INSERTdoc(pack.options);
             break;
           }
           case 'UPDATE':{
-            lmart = this.UPDATEdoc(pack.options);
+            lmart = this.local.UPDATEdoc(pack.options);
           }
         }
         if(lmart){
           lmart.then(answr=>{
-            if(this.type==='sync'){
-              console.log('save to change log')
+            console.log('LOCAL MART > ',answr);
+            if(this.type === 'backup' && !this.vapi.connected){
+              if(logneed){console.log('save to change log');
+                this.changes.LOGchange(pack.method.toUpperCase(),pack,doc).then(logres=>{
+                  console.log('Log Change After Local Update >',logres);
+                });
+              }
             }
             return resolve(answr);
-          }).catch(err=>{return resolve({success:false,msg:err})})
-        }else{return resolve({success:false,msg:'not a request'})}
+          }).catch(err=>{return resolve({success:false,msg:err,result:null})})
+        }else{return resolve({success:false,msg:'not a request',result:null})}
       });
     }
 
-    /**
-     * THis is a query on local, assuming local has
-     * all the informaiton needed. Need to exapnad
-     * this to query the api in the case of connection
-     * @param {*} flts 
-     * @returns 
-     */
-    QUERYlocal=({query={}})=>{
-      return new Promise((resolve,reject)=>{
-        this.local.QUERYdb(query).then(({err,result,success})=>{
-          if(err){return resolve(null)}
-          if(result){return resolve(result)}
-          return resolve([]);
-        });
-      });
-    }
-  
+
+
     UPDATEdoc=({query={},update={},options={}})=>{
       return new Promise((resolve,reject)=>{
         //check if connected
@@ -234,9 +268,9 @@ module.exports = class AppMart{
               this.SENDdocs({
                 method:'insert',
                 options:{
-                  docs:doc
+                  docs:docs
                 }
-              },doc).then(({connected,vapi,changelog})=>{
+              },docs).then(({connected,vapi,changelog})=>{
                 console.log(`--------------------\nSEND Report => connected:${connected} vapi:${vapi} changelog:${changelog}\n--------------------`)
               });
               console.log('LEAVING INSERT')
@@ -250,7 +284,7 @@ module.exports = class AppMart{
   
     REMOVEdoc=({query={},multi=false})=>{
       return new Promise((resolve,reject)=>{
-        this.QUERYlocal(query).then(docs=>{
+        this.local.QUERYdb(query).then(docs=>{
           this.local.REMOVEdoc(query,{multi:multi}).then(({err,num})=>{
             if(!err){
               this.SENDdocs({

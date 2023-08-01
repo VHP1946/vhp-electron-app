@@ -1,9 +1,155 @@
-
-
+const path = require('path');
+const fs = require('fs');
+const {NEDBconnect} = require('./nedb-connector.js');
+/**
+ * Change log class
+ * If needed, a change log can be added to the mart.
+ * 
+ * The class will ensure/create a file unique to the requested
+ * mart.
+ */
 module.exports = class MartChangeLog{
-    constructor(){
-
+    constructor({
+        vapi=null, //vapi
+        vapipack={},
+        localStore={}, //
+        root="",
+        file="",
+    }){
+        try{fs.mkdirSync(path.join(root,'/changelog'));}catch{}
+        this.log = new NEDBconnect(path.join(root,'changelog/',file),localStore.ensure)
+        //ensure changelog file
+        this.vapi=vapi;//connect vapi
+        this.vapipack=vapipack;//vapi half pack
     }
+
+    /**Take a change and logs it
+     * 
+     * At this point the program is not connected to the internet
+     * and the mart has successfully saved the doc.
+     * 
+     * change doc=>
+     * {
+     *  id=<id of changed doc._id>
+     *  type=<change to do>
+     *  doc=<changed doc>
+     *  
+     * }
+     * 
+     * @param {*} pack 
+     */
+
+    LOGchange(type=null,id=null,doc={}){
+        return new Promise((resolve,reject)=>{
+            if(id&&type){
+            console.log("CHANGE ID >",id);
+            let types={
+                INSERT:true,
+                REMOVE:true,
+                UPDATE:true,
+            }
+            this.QUERYchanges({id:id}).then((docs)=>{
+                console.log('--------------------------------')
+                console.log(`LOOKING to ${type} id ${id}`);
+                console.log('CHANGE LOG >',docs);
+                let insert=true;
+                if(types[type]){//check if type
+                if(docs){
+                    if(docs.length!==0){
+                    if(type==='REMOVE'){
+                        //if remove and value of type found in query is 'insert', we
+                        // could remove the item all together.
+                        insert=false;
+                        if(docs[0].type==='INSERT'){
+                        console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
+                        console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
+                        this.changes.REMOVEdoc({id:id}).then(({num,err})=>{
+                            console.log(`CHANGE REMOVED id ${id} > ${num}`);
+                            console.log(`ERROR: ${err}`);
+                            if(err){return resolve(false)}
+                            return resolve(true);
+                        });
+                        }else{
+                        console.log('CHANGE LOG REMOVE ITEM')
+                        docs[0].type=type;
+                        this.changes.UPDATEdb({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
+                            console.log(`CHANGE UPDATE> ${type} > ${numrep}`);
+                            console.log(`ERROR: ${err}`);
+                            if(err){return resolve(false)}
+                            return resolve(true)
+                        })
+                        }
+                    }else if(type==='UPDATE'){
+                        insert=false
+                        console.log('CHANGE LOG UPDATE ITEM')
+                        docs[0].doc=doc;
+
+                        this.changes.UPDATEdb({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
+                        console.log(`CHANGE UPDATE > ${type} > ${numrep}`);
+                        console.log(`ERROR: ${err}`);
+                        if(err){console.log(err);return resolve(false)}
+                        return resolve(true);
+                        });
+                    }
+                    }
+                }
+                if(insert){
+                    this.changes.INSERTdb({
+                        type:type,
+                        id:id,
+                        doc:doc
+                    }).then(({err,doc})=>{
+                        console.log(`CHANGE INSERT> ${type} > ${doc}`);
+                        console.log(`ERROR: ${err}`);
+                        if(err){return resolve(false)}
+                        return resolve(true);
+                    });
+                }
+                }else{console.log('NO MATCHING TYPE');return resolve(false);}
+            });
+            }else{return resolve(false)}
+        });
+    } 
+
+
+    /**Protects against stale data syncing
+     * When the program is connected, this function
+     * can be used to delete any old data logged. 
+     * 
+     * @param {String} id 
+     */
+    
+    staleChanges=(id)=>{
+        return new Promise((resolve,reject)=>{
+            let status=true;
+            this.log.QUERYdb({query:{id:id}}).then(doc=>{
+                if(doc){
+                    if(doc.type==='REMOVE'){
+                        status=false;
+                        this.vapi.SENDrequest({//fullfill change
+                            pack:{
+                                ...this.vapipack,
+                                method:'REMOVE',
+                                options:{
+                                    query:{id:id}
+                                }
+                            },
+                            route:'STORE'
+                        }).then(result=>{console.log('FUFILL DELTE >',result);});
+                    }
+                    this.log.REMOVEdoc({query:{id:id}}).then(result=>{
+                        console.log('Change Removed',result);
+                        if(!result.success){}//status=false;}//what to do if not success
+                        resolve(status);
+                    });
+                }else{resolve(status);}
+            })
+        });
+        //search for matching change log
+    }
+
+
+
 
 
 
@@ -20,7 +166,7 @@ module.exports = class MartChangeLog{
             console.log('DOCUMENT TO CHECK >',docs);
             if(this.vapi.connected){
                 //check the change log
-                this.changes.QUERYdb({id:docs._id}).then(changedoc=>{
+                this.changes.QUERYdb({query:{id:docs._id}}).then(changedoc=>{
                 console.log('FOUND DOCUMENT >',changedoc)
                 let found = changedoc.docs.length>0?changedoc.docs[0]:false;
                 if(found){
@@ -238,6 +384,7 @@ module.exports = class MartChangeLog{
             })
         });
     }
+
     LOGchanges(type,list){
         return new Promise((resolve,reject)=>{
             let count=0;
@@ -260,76 +407,5 @@ module.exports = class MartChangeLog{
             }else{return resolve(false)}
         });
     }
-    LOGchange(type=null,id=null,doc={}){
-        return new Promise((resolve,reject)=>{
-            if(id&&type){
-            console.log("CHANGE ID >",id);
-            let types={
-                insert:true,
-                remove:true,
-                update:true,
-            }
-            this.QUERYchanges({id:id}).then((docs)=>{
-                console.log('--------------------------------')
-                console.log(`LOOKING to ${type} id ${id}`);
-                console.log('CHANGE LOG >',docs);
-                let insert=true;
-                if(types[type]){//check if type
-                if(docs){
-                    if(docs.length!==0){
-                    if(type==='remove'){
-                        //if remove and value of type found in query is 'insert', we
-                        // could remove the item all together.
-                        insert=false;
-                        if(docs[0].type==='insert'){
-                        console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
-                        console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
-                        this.changes.REMOVEdoc({id:id}).then(({num,err})=>{
-                            console.log(`CHANGE REMOVED id ${id} > ${num}`);
-                            console.log(`ERROR: ${err}`);
-                            if(err){return resolve(false)}
-                            return resolve(true);
-                        });
-                        }else{
-                        console.log('CHANGE LOG REMOVE ITEM')
-                        docs[0].type=type;
-                        this.changes.UPDATEdb({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
-                            console.log(`CHANGE UPDATE> ${type} > ${numrep}`);
-                            console.log(`ERROR: ${err}`);
-                            if(err){return resolve(false)}
-                            return resolve(true)
-                        })
-                        }
-                    }else if(type==='update'){
-                        insert=false
-                        console.log('CHANGE LOG UPDATE ITEM')
-                        docs[0].doc=doc;
-
-                        this.changes.UPDATEdb({id:id},{$set:docs[0]},{}).then(({err,numrep})=>{
-                        console.log(`CHANGE UPDATE > ${type} > ${numrep}`);
-                        console.log(`ERROR: ${err}`);
-                        if(err){console.log(err);return resolve(false)}
-                        return resolve(true);
-                        });
-                    }
-                    }
-                }
-                if(insert){
-                    this.changes.INSERTdb({
-                        type:type,
-                        id:id,
-                        doc:doc
-                    }).then(({err,doc})=>{
-                        console.log(`CHANGE INSERT> ${type} > ${doc}`);
-                        console.log(`ERROR: ${err}`);
-                        if(err){return resolve(false)}
-                        return resolve(true);
-                    });
-                }
-                }else{console.log('NO MATCHING TYPE');return resolve(false);}
-            });
-            }else{return resolve(false)}
-        });
-    } 
 
 }

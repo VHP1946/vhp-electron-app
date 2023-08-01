@@ -60,8 +60,8 @@ module.exports = class AppManager {
       store:(eve,data)=>{
         console.log('Request to mart',data);
         if(this.store[data.store]){
-          this.store[data.store].ROUTEstore(data.pack).then(answr=>{
-            console.log('End of Routes ',answr);
+          this.store[data.store].ROUTEstore(data.pack,data.options).then(answr=>{
+            // /console.log('End of Routes ',answr);
             eve.sender.send('store',answr);
           });
         }else{eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}

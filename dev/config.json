@@ -1,5 +1,5 @@
 {
-    "app":"Reporting",
+    "app":"BEEQ",
     "dev":{
         "on":true
     },
@@ -51,17 +51,34 @@
     "controls":{
         "stdHeight":1080,
         "stdWidth":750,
-        "url":true,
-        "root":"http://18.191.223.80/",
+        "url":false,
+        "root":"./controls/",
         "mainPage":"main",
         "devPage":"main",
         "pages":{
             "login/":"index.js",
             "settings/":{},
-            "main":"Reporting"
+            "main":{}
         }
     },
     "mart":{
+        "quotes":{
+            "vapihpack":{
+                "db":"Replacement",
+                "collect":"Quote350"
+            },
+            "data":{
+                "type":"backup",
+                "sync":false
+            },
+            "locstore":{
+                "file":"quotes.db",
+                "ensure":{
+                    "fieldName":"id",
+                    "unique":true
+                }
+            }
+        }
     },
     "vapiconfig":{
         "core":{
