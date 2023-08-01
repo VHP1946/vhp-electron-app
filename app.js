@@ -78,7 +78,7 @@ module.exports = class AppManager {
   }
 
   setupRoutes(routes){
-    this.ipcMain.on('GOTO',this.controls.page);
+    this.ipcMain.handle('GOTO',this.controls.page);
     this.ADDroutes(routes);//initialize app custom routes
   }
 
@@ -92,7 +92,7 @@ module.exports = class AppManager {
   ADDroutes(addroutes = {}){
     for(let r in addroutes){
       if(!this.routes.includes(r)){
-        this.ipcMain.on(r,addroutes[r]);
+        this.ipcMain.handle(r,addroutes[r]);
         this.routes.push(r);
       }
     }
