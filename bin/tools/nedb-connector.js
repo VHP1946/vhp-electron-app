@@ -32,10 +32,8 @@ class NEDBconnect{
 
   INSERTdoc=({docs})=>{
     return new Promise((resolve,reject)=>{
-      console.log('insert ',docs);
       if(docs){
         this.docs.insert(docs,(err,doc)=>{
-          console.log(doc);
           if(doc){resolve({success:true,result:doc,msg:null})}
           else{resolve({success:false,result:null,msg:err})}
         })
@@ -46,7 +44,6 @@ class NEDBconnect{
   REMOVEdoc=({query={},multi=true})=>{
     return new Promise((resolve,reject)=>{
       this.docs.remove(query,{multi:multi},(err,num)=>{
-        console.log(err,'error')
         if(!err){return resolve({success:true,msg:false,result:num});}
         else{return resolve({success:false,msg:err,result:0});}
       });

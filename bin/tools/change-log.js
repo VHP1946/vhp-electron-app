@@ -40,9 +40,9 @@ module.exports = class MartChangeLog{
      * @param {*} pack 
      */
 
-    LOGchange(type=null,{id=null},chdoc={}){
+    LOGchange=(type=null,id=null,chdoc={})=>{
         return new Promise((resolve,reject)=>{
-            console.log('Attempt to log change',chdoc);
+            console.log('Attempt to log change');
             if(id&&type){
                 console.log("CHANGE ID >",id);
                 let types={
@@ -50,45 +50,48 @@ module.exports = class MartChangeLog{
                     REMOVE:true,
                     UPDATE:true,
                 }
-                this.log.QUERYdb({id:id}).then((docs)=>{
+                this.log.QUERYdb({query:{id:id}}).then((docs)=>{
                     console.log('--------------------------------')
                     console.log(`LOOKING to ${type} id ${id}`);
                     console.log('CHANGE LOG >',docs);
                     let insert=true;
+                    let item = null;
                     if(types[type]){//check if type
                         if(docs.result && docs.result.length==1){
-                            console.log('ChECKING STRING')
+                            item=docs.result[0];
+                            console.log('PREPARING LOG UPDATE')
                             if(type==='REMOVE'){
                                 //if remove and value of type found in query is 'insert', we
                                 // could remove the item all together.
                                 insert=false;
-                                if(docs.result[0].type==='INSERT'){
-                                console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
-                                console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
-                                this.log.REMOVEdoc({
-                                    query:{id:id}
-                                }).then((reres)=>{
-                                    console.log(`CHANGE REMOVED id ${id} > ${reres.result}`);
-                                    return resolve(reres.success);
-                                });
+                                if(docs.result.type==='INSERT'){
+                                    console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
+                                    console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
+                                    this.log.REMOVEdoc({
+                                        query:{id:id}
+                                    }).then((reres)=>{
+                                        console.log(`CHANGE REMOVED id ${id} > ${reres.result}`);
+                                        return resolve(reres.success);
+                                    });
                                 }else{
-                                console.log('CHANGE LOG REMOVE ITEM')
-                                docs.result[0].type=type;
-                                this.log.UPDATEdoc({
-                                    query:{id:id},
-                                    update:{$set:docs.result[0]}
-                                }).then((ures)=>{
-                                    console.log(`CHANGE UPDATE> ${type} > ${ures.result}`);
-                                    return resolve(ures.success);
-                                })
+                                    console.log('CHANGE LOG REMOVE ITEM')
+                                    item.type=type;
+                                    this.log.UPDATEdoc({
+                                        query:{id:id},
+                                        update:{$set:item}
+                                    }).then((ures)=>{
+                                        console.log(`CHANGE UPDATE> ${type} > ${ures.result}`);
+                                        return resolve(ures.success);
+                                    })
                                 }
                             }else if(type==='UPDATE'){
                                 insert=false
                                 console.log('CHANGE LOG UPDATE ITEM')
-                                docs.result[0].doc=chdoc;
+                                chdoc._id=undefined;
+                                item.doc=chdoc;
                                 this.log.UPDATEdoc({
                                     query:{id:id},
-                                    update:{$set:docs.result[0]}
+                                    update:{$set:item}
                                 }).then((ures)=>{
                                     console.log(`CHANGE UPDATE > ${type} > ${ures.result}`);
                                     return resolve(ures.success);
@@ -96,7 +99,7 @@ module.exports = class MartChangeLog{
                             }
                         }
                         if(insert){
-                            console.log()
+                            chdoc._id=undefined;
                             this.log.INSERTdoc({
                                 docs:{
                                     type:type,
@@ -104,7 +107,9 @@ module.exports = class MartChangeLog{
                                     doc:chdoc
                                 }
                             }).then((result)=>{
-                                console.log(`CHANGE INSERT> ${type} > ${result.result}`)
+                                console.log(`CHANGE INSERT> ${type} >`,result.result)
+                                return resolve(result.success);
+
                                 if(result.success){return resolve(false)}
                                 return resolve(true);
                             });
@@ -152,7 +157,6 @@ module.exports = class MartChangeLog{
         //search for matching change log
     }
 
-
     syncChanges=()=>{
         return new Promise((resolve,reject)=>{
             let syncstat={
@@ -193,57 +197,58 @@ module.exports = class MartChangeLog{
                             skipper=skipper+2000;
                             //setTimeout(()=>{
                                 let runner = null;
-                                console.log('RUNNER >',x,'\n>',list[x].type)
+                                console.log('RUNNER >',x,'\n>',list[x].type,this.vapipack)
                                 switch(list[x].type){
-                                case 'INSERT':{
-                                    //syncstat.update.try++;
-                                    runner=this.vapi.SENDrequest({
-                                        pack:{
-                                            ...this.vapihpack,
-                                            method:list[x].type,
-                                            options:{
-                                                docs:list[x].doc
-                                            }
-                                        },
-                                        route:'STORE'
-                                    });
-                                    break;
-                                }
-                                case 'UPDATE':{
-                                    //syncstat.update.try++;
-                                    runner=this.vapi.SENDrequest({
-                                        pack:{
-                                            ...this.vapihpack,
-                                            method:list[x].type,
-                                            options:{
-                                                query:{id:list[x].id},
-                                                update:list[x].doc
-                                            }
-                                        },
-                                        route:'STORE'
-                                    });
-                                    break;
-                                }
-                                case 'REMOVE':{
-                                    //syncstat.remove.try++;
-                                    runner = this.vapi.SENDrequest({
-                                        pack:{
-                                            ...this.vapihpack,
-                                            method:list[x].type,
-                                            options:{
-                                                query:{id:list[x].id},
-                                                multi:false
-                                            }
-                                        },
-                                        route:'STORE'
-                                    });
-                                    break;
-                                }
+                                    case 'INSERT':{
+                                        //syncstat.update.try++;
+                                        runner=this.vapi.SENDrequest({
+                                            pack:{
+                                                ...this.vapipack,
+                                                method:list[x].type,
+                                                options:{
+                                                    docs:list[x].doc
+                                                }
+                                            },
+                                            route:'STORE',
+                                            request:'MART'
+                                        });
+                                        break;
+                                    }
+                                    case 'UPDATE':{
+                                        //syncstat.update.try++;
+                                        runner=this.vapi.SENDrequest({
+                                            pack:{
+                                                ...this.vapipack,
+                                                method:list[x].type,
+                                                options:{
+                                                    query:{id:list[x].id},
+                                                    update:list[x].doc
+                                                }
+                                            },
+                                            route:'STORE'
+                                        });
+                                        break;
+                                    }
+                                    case 'REMOVE':{
+                                        //syncstat.remove.try++;
+                                        runner = this.vapi.SENDrequest({
+                                            pack:{
+                                                ...this.vapipack,
+                                                method:list[x].type,
+                                                options:{
+                                                    query:{id:list[x].id},
+                                                    multi:false
+                                                }
+                                            },
+                                            route:'STORE'
+                                        });
+                                        break;
+                                    }
                                 }
                                 if(runner){
                                 runner.then(answr=>{
                                     console.log('RECIEVE > ',x,'\n>',list[x],'\n> ',answr)
-                                    if(answr.success){
+                                    if(!answr.success){
                                         syncstat[list[x].type].failed++;
                                         syncstat[list[x].type].left.push(list[x])
                                     }else{
@@ -262,9 +267,6 @@ module.exports = class MartChangeLog{
             }else{return resolve({ran:ran,stats:syncstat})}
         })
     }
-
-
-
 
     /*
       Only manages one document at a time. will need to expand

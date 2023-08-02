@@ -89,13 +89,13 @@ module.exports = class AppMart{
         this.data = data;
 
         this.local=null;
-        this.changes=null;
+        this.changelog=null;
 
         if(data.type!='api'){
           this.local=new NEDBconnect(path.join(this.root,this.file),locstore.ensure);//connect to/create a data file
         }
         if(data.type=='backup'){
-          this.changes=new MartChangeLog({
+          this.changelog=new MartChangeLog({
             vapi:this.vapi,
             vapipack:this.vapihpack,
             locstore:locstore,
@@ -106,7 +106,6 @@ module.exports = class AppMart{
         if(data.sync){
           this.SYNCdata().then(result=>{console.log('Sync ',result)});
         }//sync the requested local data with the api
-        
     }
 
     /**ROUTE Store
@@ -117,7 +116,7 @@ module.exports = class AppMart{
      * @param {*} pack 
      * @returns 
      */
-    ROUTEstore(pack={},options={}){
+    ROUTEstore=(pack={},options={})=>{
       return new Promise((resolve,reject)=>{
         if(this.data.type==='offline'){
           if(this.local){//ensure local is setup
@@ -128,28 +127,37 @@ module.exports = class AppMart{
         }else{
           if(this.vapi.connected){
             console.log('Connected',vapi.connected);
-            let p = {//prep pack
-              ...this.vapihpack,
-              ...pack
-            }
-
             let ready = null;
 
             if(this.data.type==='backup'){
-              ready = this.changes.staleChanges(); //check/clean stale changes
+              ready = this.changelog.staleChanges(); //check/clean stale changes
             }else{ready = new Promise((resolve,reject)=>{resolve(true);})}
 
             ready.then(state=>{
+              console.log('state >> ',state);
               if(state){
                 this.vapi.SENDrequest({//to api
-                  pack:p,
+                  pack:{
+                    ...pack,
+                    ...this.vapihpack
+                  },
                   route:'STORE'
                 }).then(answr=>{
-                  console.log(options,pack,this.type);
-                  if(answr.success && pack.method!='QUERY'){
-                    this.ROUTElocal(pack).then(locAdjust=>{
-                      console.log('Adjusted non queries locally ',locAdjust);
-                    });
+                  console.log('FROM API ',answr.success,'pack ',pack)
+                  if(answr.success && pack.method.toUpperCase()!='QUERY'){
+                    let doc = null;
+                    switch(pack.method.toUpperCase()){
+                      case 'UPDATE':{
+                        doc = pack.options.update;
+                        break;
+                      }
+                      case 'INSERT':{
+                        doc = answr.result[0];
+                        pack.options.docs = doc;
+                        break;
+                      }
+                    }
+                    return resolve(this.ROUTElocal(pack,doc));
                   }
                   if(answr.success && this.data.type==='backup' && options.refresh && pack.method=='QUERY'){//refresh data
                     console.log('REFRESH request ');
@@ -162,7 +170,7 @@ module.exports = class AppMart{
                         this.local.INSERTdoc({
                           docs:answr.result
                         }).then(ianswr=>{
-                          console.log("REFRESH INSERT ",ianswr);
+                          console.log("REFRESH INSERT ",ianswr.success);
                         });
                       }else{
                         console.log('Could not clear list');
@@ -180,7 +188,7 @@ module.exports = class AppMart{
       });
     }
 
-    ROUTElocal=(pack={})=>{
+    ROUTElocal=(pack={},doc=null)=>{
       return new Promise((resolve,reject)=>{
         let lmart = null;
         let logneed=true;
@@ -205,10 +213,32 @@ module.exports = class AppMart{
         }
         if(lmart){
           lmart.then(answr=>{
-            console.log('LOCAL MART > ',answr);
+            console.log('LOCAL MART > ',answr.success);
             if(this.data.type === 'backup' && !this.vapi.connected){
-              if(logneed){console.log('save to change log');
-                this.changes.LOGchange(pack.method.toUpperCase(),pack.options.query,pack.options.update?pack.options.update:undefined).then(logres=>{
+              if(logneed){
+                console.log('save to change log');
+                console.log(pack.method,'< METHOD');
+                //populate doc
+                let doc = null;
+                let docid = null;
+                let method = pack.method.toUpperCase();
+                switch(pack.method.toUpperCase()){
+                  case 'UPDATE':{
+                    doc = pack.options.update;
+                    docid=doc.id;
+                    break;
+                  }
+                  case 'INSERT':{
+                    doc = pack.options.docs;
+                    docid = doc.id
+                    break;
+                  }
+                  case 'REMOVE':{
+                    docid = pack.options.query.id;
+                  }
+                }
+
+                this.changelog.LOGchange(method,docid,doc).then(logres=>{
                   console.log('Log Change After Local Update >',logres);
                 });
               }
@@ -226,38 +256,58 @@ module.exports = class AppMart{
       return new Promise((resolve,reject)=>{
         if(this.vapi.connected){
           //attempt to square changes
-          if(this.data.type==='backup'){
-            this.changes.syncChanges().then(answr=>{
-              console.log('DONE with Changes ',answr)
-              return resolve(answr);
-            })
-          }else{
-            this.vapi.SENDrequest({
-              pack:{
-                ...this.vapihpack,
-                method:'QUERY',
-                options:{query:{}}
-              },
-              route:'STORE'
-            }).then(list=>{
-              if(list.success){
-                console.log('SYNC list ',list.result);
-                this.local.REMOVEdoc({
-                  query:{},
-                  multi:true
-                }).then(({err,result,success})=>{
-                  if(err){return resolve({success:false,msg:err})}
-                  else{
-                    this.local.INSERTdoc({docs:list.result}).then(({err,success,result})=>{
-                      if(err){return resolve({success:false,msg:err})}
-                      else{return resolve({success:true,msg:this.file+' has synced'})}
-                    });
-                  }
-                })
-              }else{return resolve({success:false,msg:'could not reach data'})}
-            })
+          switch(this.data.type.toUpperCase()){
+            case 'BACKUP':{
+              this.SYNCbackup().then(bureport=>{
+                console.log('Backup Report >',bureport);
+              });
+              break;
+            }
+            case 'OFFLINE':{
+              this.SYNCoffline().then(offreport=>{
+                console.log('Offline Report >',offreport);
+              })
+              break;
+            }
           }
         }else{return resolve({success:false,msg:'not connected'})}
+      });
+    }
+
+    SYNCbackup=()=>{
+      return new Promise((resolve,reject)=>{
+        this.changelog.syncChanges().then(answr=>{
+          console.log('DONE with Changes ',answr)
+          return resolve(answr);
+        })
+      });
+    }
+    SYNCoffline=()=>{
+      return new Promise((resolve,reject)=>{
+        this.vapi.SENDrequest({//reach out to 
+          pack:{
+            ...this.vapihpack,
+            method:'QUERY',
+            options:{query:{}}
+          },
+          route:'STORE'
+        }).then(list=>{
+          if(list.success){
+            //console.log('SYNC list ',list.result);
+            this.local.REMOVEdoc({
+              query:{},
+              multi:true
+            }).then(({err,result,success})=>{
+              if(err){return resolve({success:false,msg:err})}
+              else{
+                this.local.INSERTdoc({docs:list.result}).then(({err,success,result})=>{
+                  if(err){return resolve({success:false,msg:err})}
+                  else{return resolve({success:true,msg:this.file+' has synced'})}
+                });
+              }
+            })
+          }else{return resolve({success:false,msg:'could not reach data'})}
+        })
       });
     }
 }
