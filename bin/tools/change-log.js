@@ -63,8 +63,8 @@ module.exports = class MartChangeLog{
                             if(type==='REMOVE'){
                                 //if remove and value of type found in query is 'insert', we
                                 // could remove the item all together.
-                                insert=false;
-                                if(docs.result.type==='INSERT'){
+                                if(item.type==='INSERT'){
+                                    insert=false;
                                     console.log('ITEM TO REMOVE WAS NEW TO LOCAL');
                                     console.log('CHANGE LOG REMOVE ITEM FROM CHANGE LOG');
                                     this.log.REMOVEdoc({
@@ -99,7 +99,8 @@ module.exports = class MartChangeLog{
                             }
                         }
                         if(insert){
-                            chdoc._id=undefined;
+                            console.log('Change Doc Inset ',chdoc);
+                            try{chdoc._id=undefined;}catch{}
                             this.log.INSERTdoc({
                                 docs:{
                                     type:type,
