@@ -57,25 +57,22 @@
         "devPage":"main",
         "pages":{
             "login/":"index.js",
-            "settings/":{},
             "main":{}
         }
     },
     "mart":{
-        "quotes":{
+        "settings":{
             "vapihpack":{
                 "db":"Replacement",
-                "collect":"Quote350"
+                "collect":"Pricing350"
             },
             "data":{
                 "type":"offline",
                 "sync":true
             },
             "locstore":{
-                "file":"quotes.db",
+                "file":"settings.db",
                 "ensure":{
-                    "fieldName":"id",
-                    "unique":true
                 }
             }
         }

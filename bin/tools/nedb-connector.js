@@ -24,8 +24,8 @@ class NEDBconnect{
   UPDATEdoc=({query={},update={},options={}})=>{
     return new Promise((resolve,reject)=>{
       this.docs.update(query,update,options,(err,numrep)=>{
-        if(numrep>0){resolve({success:true,result:numrep,msg:null})}
-        else{resolve({success:false,result:numrep,msg:err})}
+        if(numrep>0){resolve({success:true,result:numrep,err:null})}
+        else{resolve({success:false,result:numrep,err:err})}
       });
     });
   }
@@ -34,18 +34,18 @@ class NEDBconnect{
     return new Promise((resolve,reject)=>{
       if(docs){
         this.docs.insert(docs,(err,doc)=>{
-          if(doc){resolve({success:true,result:doc,msg:null})}
-          else{resolve({success:false,result:null,msg:err})}
+          if(doc){resolve({success:true,result:doc,err:null})}
+          else{resolve({success:false,result:null,err:err})}
         })
-      }else{resolve({success:false,result:null,msg:'docs not valid'})}
+      }else{resolve({success:false,result:null,err:'docs not valid'})}
     });
   }
 
   REMOVEdoc=({query={},multi=true})=>{
     return new Promise((resolve,reject)=>{
       this.docs.remove(query,{multi:multi},(err,num)=>{
-        if(!err){return resolve({success:true,msg:false,result:num});}
-        else{return resolve({success:false,msg:err,result:0});}
+        if(!err){return resolve({success:true,err:false,result:num});}
+        else{return resolve({success:false,err:err,result:0});}
       });
     });
   }

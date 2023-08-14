@@ -79,22 +79,31 @@ module.exports = class AppViews{
         
     }
 
-    pager=({view=false,page='',options})=>{
-        let goto = this.FINDpage(page);
-        console.log(goto);
+    pager=({view=false,page='',options={},url=false})=>{
         let spak = {
             success:false,
             err:null
         }
-        if(goto){
-            options = this.PREPpage(goto.type);
-            let win = this.LAUNCHpage({
+        let win = null;
+        if(url){
+            let goto = this.FINDpage(page);
+            if(goto){
+                options = this.PREPpage(goto.type);
+                win = this.LAUNCHpage({
+                    view:view,
+                    path:goto.path,
+                    options:options});
+                //do something with window
+                spak.success=true;
+            }else{spak.err='Could Not Find Page';}
+        }else{
+            win = this.LAUNCHpage({
                 view:view,
-                path:goto.path,
+                path:page,
                 options:options});
-            //do something with window
             spak.success=true;
-        }else{spak.err='Could Not Find Page';}
+            //do something with window
+        }
         return spak;
     }
     /**Find a page
