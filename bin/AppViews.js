@@ -70,11 +70,12 @@ module.exports = class AppViews{
     page=(eve,{ 
         page=null, //
         view=false, //
-        options={}
+        options={},
+        url=false,
     })=>{
         return new Promise((resolve,reject)=>{
             console.log('Request page -> ',page);
-            return resolve(this.pager({view:view,page:page,options:options}));//eve.sender.send('GOTO',this.pager({view:view,page:page,options:options}));
+            return resolve(this.pager({view:view,page:page,options:options,url:url}));//eve.sender.send('GOTO',this.pager({view:view,page:page,options:options}));
         });
         
     }
@@ -85,7 +86,7 @@ module.exports = class AppViews{
             err:null
         }
         let win = null;
-        if(url){
+        if(!url){
             let goto = this.FINDpage(page);
             if(goto){
                 options = this.PREPpage(goto.type);
