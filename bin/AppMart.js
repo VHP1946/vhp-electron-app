@@ -144,7 +144,7 @@ module.exports = class AppMart{
                   route:'STORE'
                 }).then(answr=>{
                   console.log('FROM API ',answr.success,'pack ',pack)
-                  if(answr.success && pack.method.toUpperCase()!='QUERY'){
+                  if(answr.success && pack.method.toUpperCase()!='QUERY' && this.data.type!='api'){
                     let doc = null;
                     switch(pack.method.toUpperCase()){
                       case 'UPDATE':{
