@@ -11,7 +11,7 @@ let vapi=new Core({
       sync:false,
       auth:{user:'VOGCH',pswrd:'vogel123'},
       client:true,
-      host:"http://3.135.187.89/",//"http://localhost:8080/",//
+      host:"http://3.135.187.89/",
       dev:{
           https:false,
           comments:false

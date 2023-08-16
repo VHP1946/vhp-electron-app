@@ -28,7 +28,7 @@
   "scripts": {
     "mtrans": "node ./dev/marttrans.js",
     "electron": "electron app.js",
-    "bench": "node test.js",
+    "bench": "node dev/test.js",
     "dev": "electron ./dev/app.js",
     "package-app": "electron-packager ./ REACTron --overwrite --asar=true --platform=win32 --arch=arm64 --icon=./bin/assets/icons/V-Mark-red.ico --prune=true --out=../../TESTbuilds/ --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"REACTron\""
   }
