@@ -100,45 +100,4 @@ module.exports = class AppManager {
       }
     }
   }
-
-  /** Login Application User
-   *  
-   *  takes in user information and saves it to
-   *  the users local app files. It can be used
-   *  as a login as it returns false if it can not
-   *  verify the user against the user list.
-   * 
-   * @todo better define the return pack.user (should
-   *       be the user config information).
-   * @todo have ONusersetup be return a promise. It may
-   *       be handy for later applicatoin 
-   * 
-   * @param {Array} users 
-   * @param {String} uname 
-   * @param {String} pswrd
-   * @param {Function} ONusersetup -> function passed to run if valid user
-   * @returns {status:Boolean, msg:String, user:{au.auser.config}}
-   */
-  login(eve,{
-    name='',
-    password=''
-  }){
-    let route = 'login';
-    let rpak = {
-        success:false,
-        msg:'',
-        user:null
-    }
-    //get old user data to compare after login
-    if(this.user.AUTHappuser(name,password)){
-        rpak.success=true;
-        rpak.msg = 'User is Logged in';
-        rpak.user=this.user;
-        //if new user, clean mart of old user data
-        //if cleaned, refresh mart with new user data?
-    }else{
-        rpak.msg='User login failed'
-    }
-    eve.sender.send(route,rpak)
-  }
 }

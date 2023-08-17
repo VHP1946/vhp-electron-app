@@ -56,8 +56,8 @@
         "mainPage":"main",
         "devPage":"main",
         "pages":{
-            "login/":"index.js",
-            "main":{}
+            "login/":"index.html",
+            "main/":"index.html"
         }
     },
     "mart":{

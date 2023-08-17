@@ -41,7 +41,8 @@ module.exports = class AppViews{
      * Loads the 'main' control
      */
     main({dev=false,login=false,appclose=()=>{}}){
-        let goto = this.FINDpage('main');//this.mainPage);
+        let goto = this.FINDpage('main/');//this.mainPage);
+        console.log('MAIN ',goto);
         if(goto){
             this.mainv = this.LAUNCHpage({
                 path:goto.path,
