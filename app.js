@@ -69,6 +69,13 @@ module.exports = class AppManager {
           }else{return resolve({success:false,msg:'Store doesnt exists!',result:[]});}//eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}
         });
       },
+      logout:(eve,data)=>{
+        return new Promise((resolve,reject)=>{
+          this.user.RESETuser();
+          this.controls.pager({page:'login/'})
+          return resolve({success:true,msg:'Has logged out'});
+        });
+      },
       ...routes,
       ...this.fx.routes,
       ...this.user.uRoutes

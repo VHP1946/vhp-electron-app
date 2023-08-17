@@ -31,6 +31,15 @@
                     "cell": "314-351-2533",
                     "email": "christianv@vogelheating.com"
                 }
+            },
+            "MURRY": {
+                "pswrd":"",
+                "config":{
+                    "group": "CONS",
+                    "name": "Christian Vogel",
+                    "cell": "314-351-2533",
+                    "email": "christianv@vogelheating.com"
+                }
             }
         },
         "groups":{

@@ -52,7 +52,6 @@ module.exports = class AppUser {
                 });
             },
             getUser:(eve,data)=>{return new Promise((resolve,reject)=>{return resolve(this.creds);});},//eve.sender.send('getUser',this.creds);}
-            logOut:(eve,data)=>{return new Promise((resolve,reject)=>{return resolve(this.RESETuser());});}
         }
     }
 

@@ -40,19 +40,24 @@ module.exports = class AppViews{
     /**
      * Loads the 'main' control
      */
-    main({dev=false,login=false,appclose=()=>{}}){
-        let goto = this.FINDpage('main/');//this.mainPage);
-        console.log('MAIN ',goto);
-        if(goto){
+    main({dev=false,user=false,appclose=()=>{}}){
+        let path = null;
+        if(user&&user.uname!=''){path = this.FINDpage('main/');}
+        else{path = this.FINDpage('login/');}
+
+        console.log('START ',path);
+        if(path){
             this.mainv = this.LAUNCHpage({
-                path:goto.path,
+                path:path.path,
                 view:true,
-                options:this.PREPpage(goto.type)
+                options:this.PREPpage(path.type)
             });
             this.mainv.on('close',appclose)
             return true;
         }else{return false;}
     }
+
+
 
     /**Load Page
      * Accepts a page name and tries to load
