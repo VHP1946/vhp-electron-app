@@ -232,9 +232,9 @@ module.exports = class AppViews{
                 titleBarStyle: 'hidden',//titlebar,
                 transparent:transparent,
                 titleBarOverlay:{
-                    color: '#062a49',
-                    symbolColor: '#fff',
-                    height: 40
+                    color: '#f3f3f3',//transparent,//'#062a49',
+                    symbolColor: '#000',
+                    height: 20
                 }
             });
             if(w===0){nwin.maximize();}
