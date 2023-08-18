@@ -19,8 +19,8 @@ module.exports = class AppViews{
      * 
      */
     constructor({
-        stdwidth=1080,
-        stdheight=750,
+        stdwidth=1250,
+        stdheight=800,
         root="",
         url=false,
         mainPage="main",
@@ -220,14 +220,15 @@ module.exports = class AppViews{
      */
     load=({fpath,w=this.stdwidth,h=this.stdheight,ONclose=false,menubar=false,titlebar='show',transparent=false,preload=undefined})=>{
         console.log(preload);
+        console.log('width',w)
         let nwin = new BrowserWindow({
                 webPreferences:{
                     nodeIntegration:true,
                     contextIsolation:false,
                     preload:preload
                 },
-                width:w<=0?500:w,
-                height:h<=0?500:h,
+                width:w<=0?1100:w,
+                height:h<=0?800:h,
                 autoHideMenuBar:menubar,
                 titleBarStyle: 'hidden',//titlebar,
                 transparent:transparent,
