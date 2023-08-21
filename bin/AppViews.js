@@ -23,10 +23,12 @@ module.exports = class AppViews{
         stdheight=800,
         root="",
         url=false,
+        login=true,
         mainPage="main",
         pages={}
     }){
         this.url = url;
+        this.login = login;
         this.root = root;
         this.mainPage = mainPage;
         this.pages=pages;
@@ -42,7 +44,9 @@ module.exports = class AppViews{
      */
     main({dev=false,user=false,appclose=()=>{}}){
         let path = null;
-        if(user&&user.uname!=''){path = this.FINDpage('main/');}
+        
+        if(!this.login){path = this.FINDpage('main/');}
+        else if(user&&user.uname!=''){path = this.FINDpage('main/');}
         else{path = this.FINDpage('login/');}
 
         console.log('START ',path);
