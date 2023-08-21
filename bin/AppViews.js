@@ -37,6 +37,7 @@ module.exports = class AppViews{
         this.stdwidth = stdwidth;
         this.stdheight = stdheight;
 
+        console.log(this.root);
     }
 
     /**
@@ -45,10 +46,9 @@ module.exports = class AppViews{
     main({dev=false,user=false,appclose=()=>{}}){
         let path = null;
         
-        if(!this.login){path = this.FINDpage('main/');}
-        else if(user&&user.uname!=''){path = this.FINDpage('main/');}
+        if(!this.login){console.log('no login');path = this.FINDpage(this.mainPage);}
+        else if(user&&user.uname!=''){path = this.FINDpage(this.mainPage);}
         else{path = this.FINDpage('login/');}
-
         console.log('START ',path);
         if(path){
             this.mainv = this.LAUNCHpage({
