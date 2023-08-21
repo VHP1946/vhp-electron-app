@@ -83,7 +83,16 @@ module.exports = class AppManager {
 
     this.app.on('ready',(eve)=>{
       console.log('app ready')
-      this.controls.main({appclose:(eve)=>{this.app.exit();}})
+      this.controls.main({
+        appclose:(eve)=>{
+          console.log(eve);
+          if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
+          else{
+            eve.preventDefault();
+            eve.sender.send('page-close');
+          }
+        }
+      })
     })
   }
 

@@ -4,6 +4,6 @@ const $ = require('jquery'),
 var {ipcRenderer}=require('electron');
 
 
-ipcRenderer.invoke('GOTO',{
-    page:'test'
-});
+ipcRenderer.on('page-close',(eve,data)=>{
+    console.log('close was clicked');
+})

@@ -60,14 +60,15 @@
     "controls":{
         "stdHeight":1080,
         "stdWidth":750,
-        "url":true,
+        "url":false,
         "login":false,
-        "root":"http://3.135.187.89/",
+        "root":"/controls/",
         "mainPage":"main",
         "devPage":"main",
         "pages":{
             "login/":"index.html",
-            "main":"Admin"
+            "main":"",
+            "test":""
         }
     },
     "mart":{

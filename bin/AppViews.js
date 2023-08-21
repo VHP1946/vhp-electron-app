@@ -31,6 +31,7 @@ module.exports = class AppViews{
         this.login = login;
         this.root = root;
         this.mainPage = mainPage;
+        this.currpage = mainPage;
         this.pages=pages;
 
         this.mainv = null; //holds the main BrowserWindow
@@ -103,9 +104,10 @@ module.exports = class AppViews{
                 win = this.LAUNCHpage({
                     view:view,
                     path:goto.path,
-                    options:options});
-                //do something with window
+                    options:options
+                });
                 spak.success=true;
+                this.currpage=page;
             }else{spak.err='Could Not Find Page';}
         }else{
             win = this.LAUNCHpage({
@@ -113,6 +115,7 @@ module.exports = class AppViews{
                 path:page,
                 options:options});
             spak.success=true;
+            this.currpage = page;
             //do something with window
         }
         return spak;
@@ -135,13 +138,18 @@ module.exports = class AppViews{
             path:'',
             type:''
         }
+        console.log('Page >',request);
         if(!this.url){
-            if(this.pages[request]){
+            console.log('Page >',request);
+            console.log(this.pages[request]);
+            if(this.pages[request]!=undefined){
+                console.log('Page >',request);
                 if(request[request.length-1]==='/'){
                     page.path = path.join(this.root,request,'index.html');
                     page.type = 'react';
                 }//react app
                 else{
+                    console.log('html')
                     page.path = path.join(this.root,request + '.html');
                     page.type = 'html';
                 }//...html
