@@ -16,112 +16,113 @@ const AppViews = require('./bin/AppViews.js');
 const AppMart = require('./bin/AppMart.js');
 
 module.exports = class AppManager {
-  /** App Manager
-   * configs the application
-   * - paths
-   * - settings
-   * - users
-   * 
-   * It will first read the 'paths.json' file
-   * and take direction from there.
-   * 
-   */
-  constructor({
-    appname='bin',
-    settings={},//outside
-    access={},
-    controls={},
-    mart={},
-    routes={}
-  }){
-    this.app=app;
-    this.ipcMain = ipcMain;
-    this.settings = settings;//provided settings for application
+	/** App Manager
+	 * configs the application
+	 * - paths
+	 * - settings
+	 * - users
+	 * 
+	 * It will first read the 'paths.json' file
+	 * and take direction from there.
+	 * 
+	 */
+	constructor({
+		appname='bin',
+		settings={},//outside
+		access={},
+		controls={},
+		mart={},
+		routes={}
+	}){
+		this.app=app;
+		this.ipcMain = ipcMain;
+		this.settings = settings;//provided settings for application
 
-    this.fx = new AppFX({app:appname});
+		this.fx = new AppFX({app:appname});
 
-    this.user = new AppUser({
-      ...access,
-      userfile:path.join(this.fx.approot,'userset.json')
-    });
+		this.user = new AppUser({
+		...access,
+		userfile:path.join(this.fx.approot,'userset.json')
+		});
 
-    //loop though mart, setup marts *NOT STARTED*
-    this.store = {};
-    for(let m in mart){
-      this.store[m]=new AppMart({
-        ...mart[m],
-        root:this.fx.approot
-      });
-    }
-    console.log('this is new')
-    this.controls = new AppViews(controls);
+		//loop though mart, setup marts *NOT STARTED*
+		this.store = {};
+		for(let m in mart){
+		this.store[m]=new AppMart({
+			...mart[m],
+			root:this.fx.approot
+		});
+		}
+		console.log('this is new')
+		this.controls = new AppViews(controls);
 
-    this.routes = [];
-    this.setupRoutes({
-      store:(eve,data)=>{
-        return new Promise((resolve,reject)=>{
-          console.log('Request to mart',data);
-          if(this.store[data.store]){
-            this.store[data.store].ROUTEstore(data.pack,data.options).then(answr=>{
-              // /console.log('End of Routes ',answr);
-              return resolve(answr);//eve.sender.send('store',answr);
-            });
-          }else{return resolve({success:false,msg:'Store doesnt exists!',result:[]});}//eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}
-        });
-      },
-      logout:(eve,data)=>{
-        return new Promise((resolve,reject)=>{
-          this.user.RESETuser();
-          this.controls.pager({page:'login/'})
-          return resolve({success:true,msg:'Has logged out'});
-        });
-      },
-      login:(eve,data)=>{
-        return new Promise((resolve,reject)=>{
-          console.log('login',this.controls.mainPage)
-          if(this.user.AUTHappuser(data.uname,data.pswrd)){
-            this.controls.pager({page:this.controls.mainPage});
-            return resolve({success:true,msg:'Has Logged in'})
-          }else{return resolve({success:false,msg:'Bad Credentials'})}
-        })
-      },
-      ...routes,
-      ...this.fx.routes,
-      ...this.user.uRoutes
-    });
+		this.routes = [];
+		this.setupRoutes({
+		store:(eve,data)=>{
+			return new Promise((resolve,reject)=>{
+			console.log('Request to mart',data);
+			if(this.store[data.store]){
+				this.store[data.store].ROUTEstore(data.pack,data.options).then(answr=>{
+				// /console.log('End of Routes ',answr);
+				return resolve(answr);//eve.sender.send('store',answr);
+				});
+			}else{return resolve({success:false,msg:'Store doesnt exists!',result:[]});}//eve.sender.send('store',{success:false,msg:'Store doesnt exists!',result:[]})}
+			});
+		},
+		home:this.controls.GOhome,
+		logout:(eve,data)=>{
+			return new Promise((resolve,reject)=>{
+			this.user.RESETuser();
+			this.controls.pager({page:'login/'})
+			return resolve({success:true,msg:'Has logged out'});
+			});
+		},
+		login:(eve,data)=>{
+			return new Promise((resolve,reject)=>{
+			console.log('login',this.controls.mainPage)
+			if(this.user.AUTHappuser(data.uname,data.pswrd)){
+				this.controls.pager({page:this.controls.mainPage});
+				return resolve({success:true,msg:'Has Logged in'})
+			}else{return resolve({success:false,msg:'Bad Credentials'})}
+			})
+		},
+		...routes,
+		...this.fx.routes,
+		...this.user.uRoutes
+		});
 
-    this.app.on('ready',(eve)=>{
-      console.log('app ready')
-      this.controls.main({
-        appclose:(eve)=>{
-          if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
-          else{
-            eve.preventDefault();
-            eve.sender.send('page-close');
-          }
-        }
-      })
-    })
-  }
+		this.app.on('ready',(eve)=>{
+		console.log('app ready')
+		this.controls.main({
+			appclose:(eve)=>{
+			if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
+			else{
+				eve.preventDefault();
+				eve.sender.send('page-close');
+			}
+			}
+		})
+		})
+	}
 
-  setupRoutes(routes){
-    this.ipcMain.handle('GOTO',this.controls.page);
-    this.ADDroutes(routes);//initialize app custom routes
-  }
+	setupRoutes(routes){
+		this.ipcMain.handle('GOTO',this.controls.page);
+		this.ADDroutes(routes);//initialize app custom routes
+	}
 
-  /**
-   * Pass route list as a dictionary of all the
-   * ipcMain.on functions. If the route does not
-   * already exist, it is add to ipcMain. Then
-   * it is add to this.routes[].
-   * @param {Object} routes 
-   */
-  ADDroutes(addroutes = {}){
-    for(let r in addroutes){
-      if(!this.routes.includes(r)){
-        this.ipcMain.handle(r,addroutes[r]);
-        this.routes.push(r);
-      }
-    }
-  }
+	/**
+	 * Pass route list as a dictionary of all the
+	 * ipcMain.on functions. If the route does not
+	 * already exist, it is add to ipcMain. Then
+	 * it is add to this.routes[].
+	 * @param {Object} routes 
+	 */
+	ADDroutes(addroutes = {}){
+		for(let r in addroutes){
+		if(!this.routes.includes(r)){
+			this.ipcMain.handle(r,addroutes[r]);
+			this.routes.push(r);
+		}
+		}
+	}
 }

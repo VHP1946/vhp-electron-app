@@ -3,8 +3,6 @@ const $ = require('jquery'),
 
 var {ipcRenderer}=require('electron');
 
-
-ipcRenderer.on('page-close',(eve,data)=>{
-    
-    console.log('close was clicked');
+document.getElementById('test').addEventListener('click',(eve)=>{
+    ipcRenderer.invoke('home',{}); 
 })

@@ -90,6 +90,15 @@ module.exports = class AppViews{
         });
         
     }
+    GOhome=(eve,{view=false,options={}})=>{
+        return new Promise((resolve,reject)=>{
+            return resolve(this.pager({
+                view:view,
+                page:this.mainPage,
+                options:options
+            }))
+        });
+    }
 
     pager=({view=false,page='',options={},url=false})=>{
         let spak = {
@@ -120,6 +129,7 @@ module.exports = class AppViews{
         }
         return spak;
     }
+
     /**Find a page
      * Takes a request, decides its type, creates a path, and
      * checks if that path exists.
