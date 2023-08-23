@@ -138,22 +138,27 @@ module.exports = class AppViews{
             path:'',
             type:''
         }
-        console.log('Page >',request);
+        let url = false;
         if(!this.url){
             console.log('Page >',request);
-            console.log(this.pages[request]);
             if(this.pages[request]!=undefined){
                 console.log('Page >',request);
                 if(request[request.length-1]==='/'){
                     page.path = path.join(this.root,request,'index.html');
                     page.type = 'react';
                 }//react app
+                else if(request[0]==='/'){
+                    console.log('request')
+                    page.path = this.pages[request];
+                    page.type = 'react';
+                    url = true;
+                }
                 else{
                     console.log('html')
                     page.path = path.join(this.root,request + '.html');
                     page.type = 'html';
                 }//...html
-                if(fs.existsSync(page.path)){return page;}
+                if(url||fs.existsSync(page.path)){return page;}
                 else{return false;}
             }else{return false;}
         }else{
