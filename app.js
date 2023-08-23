@@ -76,6 +76,15 @@ module.exports = class AppManager {
           return resolve({success:true,msg:'Has logged out'});
         });
       },
+      login:(eve,data)=>{
+        return new Promise((resolve,reject)=>{
+          console.log('login',this.controls.mainPage)
+          if(this.user.AUTHappuser(data.uname,data.pswrd)){
+            this.controls.pager({page:this.controls.mainPage});
+            return resolve({success:true,msg:'Has Logged in'})
+          }else{return resolve({success:false,msg:'Bad Credentials'})}
+        })
+      },
       ...routes,
       ...this.fx.routes,
       ...this.user.uRoutes
