@@ -134,7 +134,6 @@ module.exports = class AppMart{
             }else{ready = new Promise((resolve,reject)=>{resolve(true);})}
 
             ready.then(state=>{
-              console.log('state >> ',state);
               if(state){
                 this.vapi.SENDrequest({//to api
                   pack:{
@@ -177,9 +176,8 @@ module.exports = class AppMart{
                       }
                     })
                   }
-                  if(!answr.success){
-                    return resolve(this.ROUTElocal(pack));
-                  }else{return resolve(answr)}
+                  if(!answr.success && this.data.type!="api"){return resolve(this.ROUTElocal(pack));}
+                  else{return resolve(answr)}
                 })
               }else{return resolve({success:false,msg:'Item had a remove change attached to it',result:null})}
             });
