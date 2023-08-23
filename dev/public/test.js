@@ -5,5 +5,6 @@ var {ipcRenderer}=require('electron');
 
 
 ipcRenderer.on('page-close',(eve,data)=>{
+    
     console.log('close was clicked');
 })

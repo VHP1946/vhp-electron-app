@@ -208,10 +208,10 @@ module.exports = class AppViews{
         if(view&&view!=undefined){
             console.log(view)
             view.loadURL(fpath);
-            if(w!==0){
-                view.restore(); 
-                view.setSize(w,h);
-            }else{view.maximize();}
+            //if(w!==0){
+                //view.restore(); 
+                //view.setSize(w,h);
+            //}else{view.maximize();}
         }
     }
 

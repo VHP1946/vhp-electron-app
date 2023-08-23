@@ -85,7 +85,6 @@ module.exports = class AppManager {
       console.log('app ready')
       this.controls.main({
         appclose:(eve)=>{
-          console.log(eve);
           if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
           else{
             eve.preventDefault();

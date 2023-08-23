@@ -3,7 +3,8 @@ const $ = require('jquery'),
 
 var {ipcRenderer}=require('electron');
 
-
-ipcRenderer.invoke('GOTO',{
-    page:'test'
-});
+document.getElementById('test').addEventListener('click',(eve)=>{
+    ipcRenderer.invoke('GOTO',{
+        page:'test'
+    }); 
+})
