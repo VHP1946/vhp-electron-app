@@ -12,6 +12,7 @@ var swapper = (view,fpath,w=0,h=0)=>{
     }else{view.maximize();}
   }
 }
+
 //load view into a new BrowswerWindow
 var loader = ({fpath,w=0 ,h=0,close=false,menubar=false,titlebar='show',transparent=false,preload})=>{
     let nwin = new BrowserWindow({

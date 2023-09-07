@@ -35,6 +35,9 @@ module.exports = class AppManager {
 		routes={}
 	}){
 		this.app=app;
+		this.isLocked = this.app.requestSingleInstanceLock();
+        if(!this.isLocked){this.app.quit();}
+		
 		this.ipcMain = ipcMain;
 		this.settings = settings;//provided settings for application
 
@@ -92,16 +95,16 @@ module.exports = class AppManager {
 		});
 
 		this.app.on('ready',(eve)=>{
-		console.log('app ready')
-		this.controls.main({
-			appclose:(eve)=>{
-			if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
-			else{
-				eve.preventDefault();
-				eve.sender.send('page-close');
-			}
-			}
-		})
+			console.log('app ready')
+			this.controls.main({
+				appclose:(eve)=>{
+				if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
+				else{
+					eve.preventDefault();
+					eve.sender.send('page-close');
+				}
+				}
+			})
 		})
 	}
 
