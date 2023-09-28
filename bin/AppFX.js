@@ -108,7 +108,7 @@ module.exports = class AppFX{
               fs.writeFile(fullpath, data, (error) => {
                 if (!error){
                   if(open){
-                    exec(path.join(fullpath).replace(/ /g,'^ '),(err,stdout,stderr)=>{
+                    exec(path.join(fullpath).replace(/ /g,'^ ').replace(/,/g,'^,'),(err,stdout,stderr)=>{
                       if(err){presp.msg=err;}
                       else if(stdout){presp.success=true;presp.msg=stdout;}
                       else if(stderr){presp.msg=stderr;}
@@ -222,7 +222,7 @@ module.exports = class AppFX{
             reader.writeFile(wb,path.join(this.computer[drive],epath));
             retpak.msg = 'Check file for further success';
             if(open){
-              exec(`start "" "${epath2.replace(/\\/g,'\\\\')}"`,(err,stdout,stderr)=>{
+              exec(`start "" "${epath2.replace(/\\/g,'\\\\').replace(/,/g,'^,')}"`,(err,stdout,stderr)=>{
                 if(err){retpak.msg=err;}
                 else if(stdout){retpak.success=true;retpak.msg=stdout;}
                 else if(stderr){retpak.msg=stderr;}
