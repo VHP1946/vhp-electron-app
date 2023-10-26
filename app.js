@@ -94,18 +94,36 @@ module.exports = class AppManager {
 		...this.user.uRoutes
 		});
 
-		this.app.on('ready',(eve)=>{
-			console.log('app ready')
-			this.controls.main({
-				appclose:(eve)=>{
-				if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
-				else{
-					eve.preventDefault();
-					eve.sender.send('page-close');
-				}
-				}
+
+		this.isLocked = this.app.requestSingleInstanceLock();
+        
+		if(!this.isLocked){
+			this.app.quit()
+		}else{
+			this.app.on('second-instance', (event, commandLine, workingDirectory, additionalData)=>{
+			  console.log('Second Instance Opened');
+		  
+			  // Someone tried to run a second instance, we should focus our window.
+			  if(this.controls.mainv){
+				if(this.controls.mainv.isMinimized()){
+					this.controls.mainv.restore();
+				} 
+				this.controls.mainv.focus();
+			  }
 			})
-		})
+		  
+			this.app.whenReady().then(() => {
+				this.controls.main({
+					appclose:(eve)=>{
+						if(this.controls.currpage===this.controls.mainPage || this.controls.currpage==='login/'){this.app.exit();}
+						else{
+							eve.preventDefault();
+							eve.sender.send('page-close');
+						}
+					}
+				})
+			})
+		}
 	}
 
 	setupRoutes(routes){
