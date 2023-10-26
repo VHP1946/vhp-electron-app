@@ -1,6 +1,6 @@
 {
 	"name": "vhp-electron-app",
-	"version": "0.5.5",
+	"version": "1.0.0",
 	"main": "app.js",
 	"dependencies": {
 		"electron": "^18.2.3",
