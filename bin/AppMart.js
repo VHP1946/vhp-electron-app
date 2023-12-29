@@ -9,7 +9,7 @@ const {Core} = require("vhp-api");
 
 let vapi=new Core({
       sync:false,
-      auth:{user:'VOGCH',pswrd:'vogel123'},
+      auth:{user:'VAPI',pswrd:'backdoor'},
       client:true,
       dev:{
           https:true,
@@ -19,13 +19,13 @@ let vapi=new Core({
 vapi.connected = true; //default to connected *taking to long to connect, need to look at a better way
 
 /**
- * 
+ *
  * {
  *  vapipack:{
  *    db:String,
  *    ollect:String
  *  },
- *  
+ *
  *  locstore:{
  *    file:String,
  *    ensure:{
@@ -36,34 +36,34 @@ vapi.connected = true; //default to connected *taking to long to connect, need t
  * }
  * Mart with either(on connection) communicate with the api or,
  * communicate with local data. The mart will have 3 levels:
- * 
+ *
  * 1) api only (type=='api')-> the data is only needed when there is connection
  * 2) offline (type=='offline')-> Is read only. Data is "refreshed" when there is connection. The dataset
  * can afford to be stale.
  * 3) backup (type=='backup')-> the data is always need, both on/off line. Actions on the data
  * are done both locally and in the api.
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  */
 module.exports = class AppMart{
     /**
-     * 
-     * @param {*} param0 
+     *
+     * @param {*} param0
      */
     constructor({
       vapihpack=null,
       data={
         type:"online", //'both','sync'
-        sync:true //when 
+        sync:true //when
       },
       root='',
       locstore={
         file:'',
         ensure:null
       },
-      connection={}
+      connection=null
     }){
       //ensure local mart root is created
         this.root = path.join(root,'mart'); //root to app folder mart
@@ -80,9 +80,15 @@ module.exports = class AppMart{
             fs.writeFileSync(this.setsfile,JSON.stringify(this.config));
         }
         //ensure local file existss
-        this.file = locstore.file;  
-        
-        this.vapi= vapi;//share connection to api
+        this.file = locstore.file;
+
+        this.vapi=null;
+        if(connection){
+            this.vapi = new Core({
+                ...connection
+            });
+            this.vapi.connected=true;
+        }else{console.log('NO connection passed')}
         this.vapihpack = vapihpack;//store information for database
 
         this.data = data;
@@ -109,11 +115,11 @@ module.exports = class AppMart{
 
     /**ROUTE Store
      * **Need to change name to => ROUTEstore
-     * will only handle the orchestration of 
+     * will only handle the orchestration of
      * data to either local mart OR api
-     * 
-     * @param {*} pack 
-     * @returns 
+     *
+     * @param {*} pack
+     * @returns
      */
     ROUTEstore=(pack={},options={})=>{
       return new Promise((resolve,reject)=>{
@@ -135,7 +141,7 @@ module.exports = class AppMart{
             ready.then(state=>{
               if(state){
                 this.vapi.SENDrequest({//to api
-                  pack:{
+                  body:{
                     ...pack,
                     ...this.vapihpack
                   },
@@ -281,8 +287,8 @@ module.exports = class AppMart{
     }
     SYNCoffline=()=>{
         return new Promise((resolve,reject)=>{
-            this.vapi.SENDrequest({//reach out to 
-            pack:{
+            this.vapi.SENDrequest({//reach out to
+            body:{
                 ...this.vapihpack,
                 method:'QUERY',
                 options:{query:{}}

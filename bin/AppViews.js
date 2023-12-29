@@ -12,11 +12,11 @@ module.exports = class AppViews{
     /**App Controls
      * Meant to handle all the controlls within
      * a given application.
-     * 
+     *
      * @param {Number} dwidth -> default window width
      * @param {Number} dheight -> default window height
      * @param {String} controlsroot ->path to controls folder
-     * 
+     *
      */
     constructor({
         stdwidth=1250,
@@ -38,7 +38,7 @@ module.exports = class AppViews{
         this.stdwidth = stdwidth;
         this.stdheight = stdheight;
 
-        console.log(this.root);
+        console.log('hey',this.root);
     }
 
     /**
@@ -46,10 +46,11 @@ module.exports = class AppViews{
      */
     main({dev=false,user=false,appclose=()=>{}}){
         let path = null;
-        
+
         if(!this.login){console.log('no login');path = this.FINDpage(this.mainPage);}
         else if(user&&user.uname!=''){path = this.FINDpage(this.mainPage);}
         else{path = this.FINDpage('login/');}
+
         console.log('START ',path);
         if(path){
             this.mainv = this.LAUNCHpage({
@@ -67,18 +68,18 @@ module.exports = class AppViews{
     /**Load Page
      * Accepts a page name and tries to load
      * it.
-     * 
-     * @todo make react friendly - need to be able to serve react index pages. 
+     *
+     * @todo make react friendly - need to be able to serve react index pages.
      * First though is ex. 'login/' indicating a react app. Index pages can
      * be folder.
-     * 
+     *
      * @param {
      *    page:String -> page name to load
      *    view:Boolean -> TRUE opens a new window
      *    options:Object -> properties to modify the window
      * } data
      */
-    page=(eve,{ 
+    page=(eve,{
         page=null, //
         view=false, //
         options={},
@@ -88,7 +89,7 @@ module.exports = class AppViews{
             console.log('Request page -> ',page);
             return resolve(this.pager({view:view,page:page,options:options,url:url}));//eve.sender.send('GOTO',this.pager({view:view,page:page,options:options}));
         });
-        
+
     }
     GOhome=(eve,{view=false,options={}})=>{
         return new Promise((resolve,reject)=>{
@@ -133,11 +134,11 @@ module.exports = class AppViews{
     /**Find a page
      * Takes a request, decides its type, creates a path, and
      * checks if that path exists.
-     * 
+     *
      * if it does not, false is return. Otherwise an object is
      * returned describing the page
-     * 
-     * @param {String} request 
+     *
+     * @param {String} request
      * @returns {
      *  path:String,
      *  type:String
@@ -211,27 +212,26 @@ module.exports = class AppViews{
 
 
     /**
-     * 
+     *
      * @param {{
      *  fpath:String,
      *  view:BrowserWindow (this.mainv),
      *  w:Number (this.stdwidth),
      *  h:Number (this.stdheight)
-     * }} param0 
+     * }} param0
      */
     swap=({fpath,view,w=this.stdwidth,h=this.stdheight})=>{
         if(view&&view!=undefined){
-            console.log(view)
-            view.loadURL(fpath);
+            this.URLorNO(fpath,view);
             //if(w!==0){
-                //view.restore(); 
+                //view.restore();
                 //view.setSize(w,h);
             //}else{view.maximize();}
         }
     }
 
     /**
-     * 
+     *
      * @param {{
      *   fpath:String,
      *   view:BrowserWindow (this.mainv),
@@ -242,12 +242,13 @@ module.exports = class AppViews{
      *   titlebar:String ('show'),
      *   transparent:Boolean (false),
      *   preload:String ('':filepath)
-     * }} param0 
+     * }} param0
      * @returns {BrowserWindow}
      */
     load=({fpath,w=this.stdwidth,h=this.stdheight,ONclose=false,menubar=false,titlebar='show',transparent=false,preload=undefined})=>{
         console.log(preload);
-        console.log('width',w)
+        console.log('width',fpath)
+        fs.readFile(fpath,'utf8',(err,data)=>{console.log(data);})
         let nwin = new BrowserWindow({
                 webPreferences:{
                     nodeIntegration:true,
@@ -266,8 +267,14 @@ module.exports = class AppViews{
                 }
             });
             if(w===0){nwin.maximize();}
-            nwin.loadURL(fpath);
+            this.URLorNO(fpath,nwin);
             if(ONclose){nwin.on('close',ONclose);}
         return nwin;
+    }
+
+    URLorNO=(fpath,view)=>{
+        if(fpath.includes('http','https')){
+            view.loadURL(fpath);
+        }else{view.loadFile(fpath);}
     }
 }

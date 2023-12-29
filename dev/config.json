@@ -67,7 +67,7 @@
         "devPage":"main",
         "pages":{
             "login/":"index.html",
-            "main":"",
+            "main":"main.html",
             "test":""
         }
     },

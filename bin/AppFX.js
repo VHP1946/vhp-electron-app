@@ -13,20 +13,21 @@ module.exports = class AppFX{
         this.computer = {
             uname: os.userInfo().username,
             spdrive: path.join(os.userInfo().homedir, '/vogelheating.com'),
+            hdrive: path.join(os.userInfo().homedir),
             cdrive: 'C:/',
             ddrive: path.join(os.userInfo().homedir,'/Desktop')
         }
-        this.lsroot = path.join(this.computer.cdrive,'IMDB');//setup local path
+        this.lsroot = path.join(this.computer.hdrive,'IMDB');//setup local path
         if(!fs.existsSync(this.lsroot)){fs.mkdirSync(this.lsroot);}//setup IMBD folder
 
         let userfilepath = path.join(this.lsroot,'userconfig.json');
         if(!fs.existsSync(userfilepath)){fs.writeFileSync(userfilepath,'{}')}//setup userconfig file
-        
+
         this.approot = app?path.join(this.lsroot,app):path.join(this.lsroot,'unkown');//assign app folder path
         if(this.approot){if(!fs.existsSync(this.approot)){fs.mkdirSync(this.approot);}}//setup app folder if needed
 
-        
-        
+
+
         //this.setsfile = path.join(this.root,'storesettings.json');
         this.routes={
             openFolder:this.openFolder,
@@ -35,19 +36,19 @@ module.exports = class AppFX{
             jsonTOexcel:this.jsonTOexcel
         }
     }
-    
+
     /**Open Folder
-     * 
+     *
      * upon request, will open a folder in the file explorer with a given path,
      * relative to a given drive.
-     * 
+     *
      * Have tested and it works
-     * 
-     * @param {ipcMain Event} eve 
+     *
+     * @param {ipcMain Event} eve
      * @param {
      *   drive:String | what drive to root from
      *   path:String | path from the above drive
-     * } param1 
+     * } param1
      */
     openFolder=(eve,{
         drive='',
@@ -74,18 +75,18 @@ module.exports = class AppFX{
     /**Printer
     * Upon request, will print the contents of the page
     * requested from
-    * 
+    *
     * HAVE tested a print screen
     * Have not tested saving to specific location
-    * 
-    * @param {ipcMain Event} eve 
+    *
+    * @param {ipcMain Event} eve
     * @param {
     *  fpath:String | os.tmpdir(),
     *  fname:String | 'print',
     *  open:Boolean | true
-    *  
+    *
     * } data
-    * @returns 
+    * @returns
     */
     printer=(eve,
       {
@@ -135,7 +136,7 @@ module.exports = class AppFX{
 
     /**  Standard excel sheet to a json filter
     *
-    *   
+    *
     *   @param {ipcMain Event} eve
     *   @param {String} epath
     *   @param {String} jpath
@@ -191,11 +192,11 @@ module.exports = class AppFX{
     }
 
     /**
-     * 
-     * @param {*} eve 
+     *
+     * @param {*} eve
      * @param {String} epath
      * @param {Object} data
-     * @param {Boolean} open 
+     * @param {Boolean} open
      */
     jsonTOexcel=(eve,{
       drive='',
@@ -213,7 +214,7 @@ module.exports = class AppFX{
           if(this.computer[drive]){
             let wb = reader.utils.book_new();
 
-            
+
             //for(let i=0;i<data.length;i++){
               reader.utils.book_append_sheet(wb,reader.utils.json_to_sheet(data),sheetName);
             //}
